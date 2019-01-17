@@ -13,10 +13,9 @@ class DashBoard extends Component {
         this.state = {
             date: new Date()
         };
-        this.onChange = this.onChange.bind(this);
     }
 
-    onChange(date) {
+    onChange=(date)=> {
         this.setState({ date });
     }
 
@@ -42,7 +41,7 @@ class DashBoard extends Component {
                                 <Panel.Body className="h-150 background-image img-2" >
                                     <div>
                                         <h1>3</h1>
-                                        <h3>Today Present</h3>
+                                        <h3>Today Present's</h3>
                                     </div>
                                 </Panel.Body>
                             </Panel>
@@ -52,7 +51,7 @@ class DashBoard extends Component {
                                 <Panel.Body className="h-150 background-image img-3" >
                                     <div>
                                         <h1>0</h1>
-                                        <h3>Today Leave</h3>
+                                        <h3>Today on Leave</h3>
                                     </div>
                                 </Panel.Body>
                             </Panel>

@@ -14,10 +14,9 @@ export default class History extends React.Component {
       'month': ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'year': ['2018', '2017', '2016', '2015']
     };
-    this.onChangeHandler = this.onChangeHandler.bind(this);
   }
 
-  onChangeHandler(e) {
+  onChangeHandler=(e)=> {
     this.setState((state) => {
       state.history[e.target.name] = e.target.value;
       return state;

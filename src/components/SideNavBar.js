@@ -12,11 +12,12 @@ class SideNavBar extends Component {
     this.state = {
       showNav: false,
     };
-    this.CloseSideNav = this.CloseSideNav.bind(this);
   }
-  CloseSideNav() {
+
+  CloseSideNav=()=> {
     this.setState({ showNav: false })
   }
+
   render() {
     return (
       <div>
@@ -29,7 +30,7 @@ class SideNavBar extends Component {
                     <Glyphicon glyph="menu-hamburger" className="menu" onClick={() => this.setState({ showNav: true })} />
                   </div>
                   <div>
-                    <img src={require("../assets/images/header-logo.png")} alt="Javee Infotech" className="m-10"></img>
+                    <img src={require("../assets/images/header-logo.png")} alt="Javee Infotech" className="m-10" width="80"></img>
                   </div>
                 </div>
               </Navbar.Header>
@@ -52,7 +53,7 @@ class SideNavBar extends Component {
           title={<img src={require("../assets/images/sidebar-logo.png")} width="140" alt="Javee Infotech"></img>}
           items={
             [<Link to="dashboard"><div onClick={this.CloseSideNav}><Glyphicon glyph="th-large" className="mr-15"></Glyphicon>DashBoard</div></Link>,
-             <Link to="user"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>User</div></Link>,
+             <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>User</div></Link>,
              <Link to="history"><div onClick={this.CloseSideNav}><Glyphicon glyph="align-center" className="mr-15"></Glyphicon>History</div></Link>
             ]
           }

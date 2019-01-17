@@ -46,13 +46,20 @@
   background-color: #294e9d;
   color : #fff;
 }
-.button :active , .button :focus  {
+.button:focus, .button.focus ,.button:active, .button.active {
+  color: #fff !important;
   background-color: #294e9d !important;
-  color : #fff !important;
+  border : none !important;
+  outline : none !important;
+  outline-offset: none !important;
 }
-.button:hover{
-  background-color: #48ac33;
+.button.focus,.button:hover{
+  background-color: #48ac33 !important;
   color : #fff;
+}
+.icon-button{
+  color:#333 !important;
+  cursor : context-menu;
 }
 @media screen and (max-width:656px){
   .logo-image{

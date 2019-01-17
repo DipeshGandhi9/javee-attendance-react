@@ -1,0 +1,6 @@
+export const FETCH_EMPLOYEE = 'FETCH_EMPLOYEE';
+export const FETCH_EMPLOYEES = 'FETCH_EMPLOYEES';
+export const REMOVE_FETCH_EMPLOYEE = 'REMOVE_FETCH_EMPLOYEE';
+export const UPDATE_FETCH_EMPLOYEE = 'UPDATE_FETCH_EMPLOYEE';
+ 
+export const API_URL ="http://localhost:8080/";

@@ -14,54 +14,60 @@ class Login extends Component {
       'username': '',
       'password': '',
       isLoggedIn: true,
+      isLoggedOut : true,
       'date': new Date().toLocaleString(),
       showSiteLogin : false,
       submitted : false
     };
-
-    this.onhandleHide = this.onhandleHide.bind(this);
-    this.onLoginClick = this.onLoginClick.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.onSiteLoginClick = this.onSiteLoginClick.bind(this);
   }
 
-  onhandleHide() {
+  onLoginKeyPress=(e)=>{
+    if(e.key === 'Enter'){
+      this.onLoginClick();
+    }
+  }
+
+  onSiteLoginKeyPress=(e)=>{
+    if(e.key === 'Enter'){
+      this.onSiteLoginClick();
+    }
+  }
+
+  onhandleHide=()=> {
     this.setState({ show: false , showSiteLogin : false });
   }
 
-  onSiteLoginClick(){
+  onSiteLoginClick=()=>{
         if(this.state.username === 'admin' && this.state.password === 'admin'){       
       this.setState({showSiteLogin : false}); 
       window.open("./dashboard","_SELF");
     }
   }
 
-  onLoginClick(e) {   
-    if (this.state.username === 'admin' && this.state.password === 'admin') {
+  onLoginClick=()=> {   
+    if ((this.state.username === 'admin' && this.state.password === 'admin') ){
       this.setState({ show: false ,isLoggedIn: false });
-      // this.setState({ });
       document.getElementById("user").innerHTML = "User Name : " + this.state.username;
       document.getElementById("timein").innerHTML = "Time In : " + this.state.date; 
     }
     if (this.state.isLoggedIn === false && this.state.username === 'admin' && this.state.password === 'admin' ) {
       this.setState((state) => {
         state.date = new Date().toLocaleString();
+        state.isLoggedIn = true;
         document.getElementById("timeout").innerHTML = "Time Out : " + state.date;
         return state;
       });
     }
   }
   
-  handleChange(e) {
+  handleChange=(e)=> {
     this.setState({ [e.target.id]: e.target.value });
   }
 
   render() {
     return (
       <div>
-        
         <Grid >
-      
           <Row className="mt-140" align="center">
             <Image src={require("../assets/images/main-logo.png")} className="logo-image"></Image>
             <Row>
@@ -76,10 +82,10 @@ class Login extends Component {
           <Row className="mt-10">
             <ButtonToolbar>
               <Col xs={6}>
-                <Button className="pull-right button" bsSize="large" onClick={() => this.setState({ showSiteLogin: true , 'username' : "" , 'password' : ""})} >Site Login</Button>
+                <Button className="pull-right button" bsSize="large" onClick={() => this.setState({ showSiteLogin: true , 'username' : "" , 'password' : ""})}  >Site Login</Button>
               </Col>
               <Col xs={6} className="seperator">
-                <Button bsSize="large" id="login" className="button " onClick={() => this.setState({ show: true, 'username' : "" , 'password' : "" })}>{this.state.isLoggedIn ? 'Login' : 'Logout'}</Button>
+                <Button bsSize="large" id="login" className="button " onClick={() => this.setState({ show: true, 'username' : "" , 'password' : "" })} >{this.state.isLoggedIn  ? 'Login ' : 'Logout'}</Button>
               </Col>
             </ButtonToolbar>
           </Row>
@@ -96,7 +102,7 @@ class Login extends Component {
                     <b>Username</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off"/>
+                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus"/>
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
@@ -104,14 +110,14 @@ class Login extends Component {
                     <b>Password</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} autoComplete="off"/>
+                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} onKeyPress={this.onLoginClick } autoComplete="off"/>
                   </Col>
                 </FormGroup>
               </Form>
             </Modal.Body>
 
             <Modal.Footer>
-              <Button  className="pull-right button"  onClick={this.onLoginClick}>{this.state.isLoggedIn ? 'LOGIN' : 'LOGOUT'}</Button>
+              <Button  className="pull-right button"  onClick={this.onLoginClick} >{this.state.isLoggedIn ? 'LOGIN' : 'LOGOUT'}</Button>
             </Modal.Footer>
           </Modal>
 
@@ -127,7 +133,7 @@ class Login extends Component {
                     <b>Username</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off" />
+                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" />
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
@@ -135,14 +141,14 @@ class Login extends Component {
                     <b>Password</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} autoComplete="off" />
+                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} onKeyPress={this.onSiteLoginKeyPress } autoComplete="off" />
                   </Col>
                 </FormGroup>
               </Form>
             </Modal.Body>
 
             <Modal.Footer>
-              <Button className="pull-right button" onClick={this.onSiteLoginClick}>LOGIN</Button>
+              <Button className="pull-right button" onClick={this.onSiteLoginClick} >LOGIN</Button>
             </Modal.Footer>
           </Modal>
 

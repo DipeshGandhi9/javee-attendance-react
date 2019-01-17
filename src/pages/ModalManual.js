@@ -13,20 +13,17 @@ class ModalManual extends Component {
       date: new Date(),
       isLoggedIn: true
     };
-    this.handleHide = this.handleHide.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  handleHide() {
+  handleHide=()=>{
     this.setState({ show: false });
   }
 
-  handleChange(e) {
+  handleChange=(e)=> {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit() {
+  onSubmit=()=> {
     if (this.state.reason !== "") {
       this.setState({ show: false });
       this.setState({ isLoggedIn: false });
