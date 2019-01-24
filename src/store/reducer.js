@@ -1,6 +1,17 @@
 import * as types from './constants';
 
 const initialState = {
+    userList : [],
+    user : {},
+    userTaleHeaders: {
+        'id' : "Id",
+        "employeeName": "Employee Name",
+        "userName" : "User Name",
+        "role" : "Role",
+        "department" : "Department",
+        "edit" : "Edit",
+        "delete" : "Delete"
+    },
     employee: {},
     employees: [],
     employeeTaleHeaders: {

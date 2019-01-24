@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar, Row, Col, Image, Modal, Grid, Form, FormGroup, FormControl } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
 
 import './Pages.css';
 
+import {authUser} from '../actions'
 import ModalManual from './ModalManual.js';
 
 class Login extends Component {
@@ -10,6 +14,7 @@ class Login extends Component {
     super(props);
 
     this.state = {
+    
       show: false,
       'username': '',
       'password': '',
@@ -18,8 +23,9 @@ class Login extends Component {
       'date': new Date().toLocaleString(),
       showSiteLogin : false,
       submitted : false
-    };
+    
   }
+}
 
   onLoginKeyPress=(e)=>{
     if(e.key === 'Enter'){
@@ -37,29 +43,32 @@ class Login extends Component {
     this.setState({ show: false , showSiteLogin : false });
   }
 
-  onSiteLoginClick=()=>{
-        if(this.state.username === 'admin' && this.state.password === 'admin'){       
+  onSiteLoginClick=(e)=>{
+    if(this.state.username && this.state.password)  {
+      this.props.authUser(this.state.username,this.state.password);    
       this.setState({showSiteLogin : false}); 
       window.open("./dashboard","_SELF");
     }
   }
 
-  onLoginClick=()=> {   
-    if ((this.state.username === 'admin' && this.state.password === 'admin') ){
+  onLoginClick=(e)=> { 
+    if(this.state.username && this.state.password)  {
+      this.props.authUser(this.state.username,this.state.password);
       this.setState({ show: false ,isLoggedIn: false });
       document.getElementById("user").innerHTML = "User Name : " + this.state.username;
       document.getElementById("timein").innerHTML = "Time In : " + this.state.date; 
     }
-    if (this.state.isLoggedIn === false && this.state.username === 'admin' && this.state.password === 'admin' ) {
+    if (this.state.isLoggedIn === false && this.state.username && this.state.password){
+      this.props.authUser(this.state.username,this.state.password);
       this.setState((state) => {
         state.date = new Date().toLocaleString();
         state.isLoggedIn = true;
         document.getElementById("timeout").innerHTML = "Time Out : " + state.date;
         return state;
       });
-    }
   }
-  
+  }
+
   handleChange=(e)=> {
     this.setState({ [e.target.id]: e.target.value });
   }
@@ -110,7 +119,7 @@ class Login extends Component {
                     <b>Password</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} onKeyPress={this.onLoginClick } autoComplete="off"/>
+                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange}  onKeyPress={this.onLoginKeyPress} autoComplete="off"/>
                   </Col>
                 </FormGroup>
               </Form>
@@ -169,4 +178,12 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+})
+
+export default withRouter(connect(
+  mapStateToProps,
+  dispatch => bindActionCreators({
+    authUser
+  },dispatch)
+)(Login));
