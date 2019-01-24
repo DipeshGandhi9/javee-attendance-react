@@ -51,21 +51,21 @@ class Login extends Component {
     }
   }
 
-  onLoginClick=(e)=> { 
-    if(this.state.username && this.state.password)  {
-      this.props.authUser(this.state.username,this.state.password);
+  onLoginClick=()=> { 
+    if(this.props.authUser(this.state.username,this.state.password))  {
+      
       this.setState({ show: false ,isLoggedIn: false });
       document.getElementById("user").innerHTML = "User Name : " + this.state.username;
       document.getElementById("timein").innerHTML = "Time In : " + this.state.date; 
-    }
-    if (this.state.isLoggedIn === false && this.state.username && this.state.password){
-      this.props.authUser(this.state.username,this.state.password);
-      this.setState((state) => {
-        state.date = new Date().toLocaleString();
-        state.isLoggedIn = true;
-        document.getElementById("timeout").innerHTML = "Time Out : " + state.date;
-        return state;
-      });
+    
+    // if (this.state.isLoggedIn === false && this.state.username && this.state.password){
+    //   this.props.authUser(this.state.username,this.state.password);
+    //   this.setState((state) => {
+    //     state.date = new Date().toLocaleString();
+    //     state.isLoggedIn = true;
+    //     document.getElementById("timeout").innerHTML = "Time Out : " + state.date;
+    //     return state;
+    //   });
   }
   }
 

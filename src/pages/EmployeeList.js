@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 
 import './Pages.css';
 import SideNavBar from '../components/SideNavBar.js';
-import { loadEmployeeInfo , deleteEmployeeInfo , updateEmployeeInfo  } from '../actions';
+import { loadEmployeeInfo , deleteEmployeeInfo} from '../actions';
 
 const tooltip = (
     <Tooltip id="tooltip">Add Employee</Tooltip>
@@ -28,7 +28,6 @@ class EmployeeList extends React.Component {
 
     componentDidMount=()=>{
         this.props.loadEmployeeInfo();
-        console.log(this.props.userList)
     }
  
     deleteEmployee=(e,id)=>{
@@ -91,18 +90,18 @@ class EmployeeList extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.props.userList.map((user, id) => {
+                                        {this.props.employeeList.map((employee, id) => {
                                             return (
-                                                <tr key={user.id}>
-                                                    <td>{user.id}</td>
-                                                    <td>{user.firstName}</td>
-                                                    <td>{user.lastName}</td>
-                                                    <td>{user.address}</td>
-                                                    <td>{user.gender}</td>
-                                                    <td>{user.email}</td>
-                                                    <td>{user.phoneNumber}</td>
-                                                    <td><Link to={{pathname: "/employee",search : "id=" +user.id }} className="icon-button"><Glyphicon glyph="edit"  /></Link> </td>
-                                                    <td  onClick={()=>{this.setState({show:true,id : user.id})}}><Glyphicon glyph="remove" /> </td>
+                                                <tr key={employee.id}>
+                                                    <td>{employee.id}</td>
+                                                    <td>{employee.firstName}</td>
+                                                    <td>{employee.lastName}</td>
+                                                    <td>{employee.address}</td>
+                                                    <td>{employee.gender}</td>
+                                                    <td>{employee.email}</td>
+                                                    <td>{employee.phoneNumber}</td>
+                                                    <td><Link to={{pathname: "/employee",search : "id=" +employee.id }} className="icon-button"><Glyphicon glyph="edit"  /></Link> </td>
+                                                    <td  onClick={()=>{this.setState({show:true,id : employee.id})}}><Glyphicon glyph="remove" /> </td>
                                                 </tr>
                                             );
                                         })}
@@ -136,13 +135,13 @@ class EmployeeList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-     userList: state.app.employees,
+    employeeList: state.app.employees,
     tableHeader : state.app.employeeTaleHeaders
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadEmployeeInfo,deleteEmployeeInfo,updateEmployeeInfo,
+        loadEmployeeInfo,deleteEmployeeInfo
     }, dispatch),
 )(EmployeeList));

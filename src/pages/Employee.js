@@ -4,10 +4,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import queryString from 'query-string';
+import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar.js';
 import { updateEmployeeInfo, addEmployeeInfo } from '../actions';
+
+const cookies = new Cookies();
 
 class Employee extends Component {
     constructor(props) {
@@ -33,7 +36,7 @@ class Employee extends Component {
     }
    
     getEmployeeObj = (id) => {
-        fetch(API_URL + 'api/employee/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+localStorage.getItem('token')} })
+        fetch(API_URL + 'api/employee/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
             .then(response => response.json())
             .then(employeeObj => {
                 this.setState((state) => {
@@ -170,7 +173,6 @@ class Employee extends Component {
 }
 
 const mapStateToProps = state => ({
-    
 })
 
 export default withRouter(connect(

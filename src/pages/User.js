@@ -3,9 +3,11 @@ import { Grid, Well, Form, FormGroup, Col, FormControl, Button } from 'react-boo
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import queryString from 'query-string';
 
+import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadEmployeeInfo } from '../actions';
+import { loadUserInfo ,loadEmployeeInfo , addUserInfo } from '../actions';
 
 class User extends Component {
     constructor(props) {
@@ -14,37 +16,59 @@ class User extends Component {
             userObj: {
                 'employee': "",
                 'userName': "",
-                'password': "",
+                'password': ""
             }
         }
     }
 
-    componentDidMount = () => {
-      //  this.props.loadUserInfo();
+    componentDidMount() {
+        this.props.loadEmployeeInfo();
+        var queryParameters = queryString.parse(this.props.location.search);
+        if (queryParameters['id']) {
+            this.getEmployeeObj(queryParameters['id']);
+        }
     }
 
-    handleChange=(e)=> {
-        this.setState({ [e.target.name]: e.target.value })
+    getEmployeeObj = (id) => {
+        fetch(API_URL + 'api/user/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+localStorage.getItem('token')} })
+            .then(response => response.json())
+            .then(userObj => {
+                this.setState((state) => {
+                    state.userObj = userObj;
+                    return state;
+                })
+            }
+        )
     }
+
+    handleChange = (e) => {
+        const { userObj } = this.state;
+        userObj[e.target.name] = e.target.value;
+        this.setState({ userObj })
+    }
+
 
     onChangeHandeler = (e) => {
         var div = document.getElementById("id");
         let id = e.target.value;
         console.log(id);
-        this.props.employeeList.filter(function (item) {
-            return item.id === e.target.value;
-        })
-        if (e.target.value === "") {
+        let selectedEmployee = this.props.employeeList.filter(function (item) {
+            return item.id.toString() === id;
+        });
+        if (id === "") {
             div.innerHTML = "";
             div.removeAttribute("class");
         }
         else {
-            var name = this.props.employeeList[id - 1].firstName + " " + this.props.employeeList[id - 1].lastName;
+            var name = selectedEmployee[0].firstName + " " + selectedEmployee[0].lastName;
             console.log(name);
             div.innerHTML = "Id : " + id + "&nbsp;&nbsp; Name : " + name + " &nbsp;&nbsp;Department : ";
-            div.className = "mb-10";  
+            div.className = "mb-10";
         }
-        console.log(this.state)
+        const { userObj } = this.state;
+        userObj["employee"] = name;
+        this.setState({userObj})
+        console.log(this.state);
     }
 
     onReset = () => {
@@ -54,13 +78,24 @@ class User extends Component {
         document.getElementById("select").selectedIndex = 0;
     }
 
-    onSubmit=()=>{
+    onSubmit = (e) => {
+        const { addUserInfo, history } = this.props;
+        
         if(this.state.password === this.state.confirmPassword ){
-            console.log("submit clicked");
+            addUserInfo(this.state.userObj, (error) => {
+                if (!error) {
+                    history.push('./userlist');
+                }
+                else {
+                    this.setState({ isLoading: false })
+                    console.error(error);
+                }
+            });
         }
         else{
-            console.log("password must be same");
+            window.alert("password must be same");
         }
+        console.log(this.state);
     }
 
     render() {
@@ -75,11 +110,11 @@ class User extends Component {
                                     <b>Employee Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl componentClass="select" name="employee" id="select" onChange={this.onChangeHandeler} required >
+                                    <FormControl componentClass="select"  id="select" onChange={this.onChangeHandeler} required >
                                         <option value=""></option>
-                                        {this.props.employeeList.map((employee) => {
+                                        {this.props.employeeList.map((employee,id) => {
                                             return (
-                                                <option key={employee.id} value={employee.id} name={employee.firstName}>
+                                                <option key={id} value={employee.id} name={employee.firstName}>
                                                     {employee.firstName} {employee.lastName}
                                                 </option>
                                             );
@@ -97,7 +132,7 @@ class User extends Component {
                                     <b>User Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="text" onChange={this.handleChange} name="userName"  required></FormControl>
+                                    <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userName}  required></FormControl>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -105,7 +140,7 @@ class User extends Component {
                                     <b>Password</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="password" id="password" name="password" onChange={this.handleChange} required></FormControl>
+                                    <FormControl type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} required></FormControl>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -113,7 +148,7 @@ class User extends Component {
                                     <b>Confirm Password</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="password" id="confirmPassword" name="confirmPassword" onChange={this.handleChange}  required></FormControl>
+                                    <FormControl type="password" id="confirmPassword" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} required></FormControl>
                                 </Col>
                             </FormGroup>
                             <div align="center" className="mt-30">
@@ -135,6 +170,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadEmployeeInfo
+        loadUserInfo,loadEmployeeInfo,addUserInfo
     }, dispatch)
 )(User));

@@ -55,6 +55,22 @@ const reducer = (state = initialState, action) => {
                 return employee;
             })
         };
+        case types.FETCH_USERS:
+        return {
+            ...state,
+            userList: action.payload,
+        };
+        case types.FETCH_USER:
+        return {
+            ...state,
+            user: action.payload,
+        };
+        case types.REMOVE_FETCH_USER:
+        return {
+            ...state,
+            userList: state.employees.filter(user =>
+                user.id !== action.payload)
+            };
         default:
             return state;
     }
