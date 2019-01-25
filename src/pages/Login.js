@@ -6,7 +6,8 @@ import { withRouter } from 'react-router';
 
 import './Pages.css';
 
-import {authUser} from '../actions'
+import {authUser} from '../actions/userActions';
+import {addAttendanceInfo} from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
 
 class Login extends Component {
@@ -23,7 +24,6 @@ class Login extends Component {
       'date': new Date().toLocaleString(),
       showSiteLogin : false,
       submitted : false
-    
   }
 }
 
@@ -52,21 +52,13 @@ class Login extends Component {
   }
 
   onLoginClick=()=> { 
-    if(this.props.authUser(this.state.username,this.state.password))  {
-      
-      this.setState({ show: false ,isLoggedIn: false });
+   
+    this.props.authUser(this.state.username,this.state.password);
+    
+      this.setState({ show: false ,isLoggedIn: false , 'timeInDate' : new Date().toUTCString() });
       document.getElementById("user").innerHTML = "User Name : " + this.state.username;
       document.getElementById("timein").innerHTML = "Time In : " + this.state.date; 
-    
-    // if (this.state.isLoggedIn === false && this.state.username && this.state.password){
-    //   this.props.authUser(this.state.username,this.state.password);
-    //   this.setState((state) => {
-    //     state.date = new Date().toLocaleString();
-    //     state.isLoggedIn = true;
-    //     document.getElementById("timeout").innerHTML = "Time Out : " + state.date;
-    //     return state;
-    //   });
-  }
+      this.props.addAttendanceInfo(this.state);
   }
 
   handleChange=(e)=> {
@@ -184,6 +176,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-    authUser
+    authUser,addAttendanceInfo
   },dispatch)
 )(Login));

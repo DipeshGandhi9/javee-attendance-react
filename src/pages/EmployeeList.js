@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 
 import './Pages.css';
 import SideNavBar from '../components/SideNavBar.js';
-import { loadEmployeeInfo , deleteEmployeeInfo} from '../actions';
+import { loadEmployeeInfo , deleteEmployeeInfo} from '../actions/employeeActions';
 
 const tooltip = (
     <Tooltip id="tooltip">Add Employee</Tooltip>

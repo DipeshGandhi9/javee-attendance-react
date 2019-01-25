@@ -1,19 +1,29 @@
 import React from 'react';
 import { Button, Form, Grid, FormControl, Row, Col, Table, Glyphicon } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router';
 
-import SideNavBar from '../components/SideNavBar.js';
 import './Pages.css';
 
-export default class History extends React.Component {
+import SideNavBar from '../components/SideNavBar.js';
+import { loadAttendanceInfo  } from '../actions/attendanceActions';
+import {loadEmployeeInfo} from '../actions/employeeActions'
+
+
+class History extends React.Component {
   constructor(props) {
     super(props);
     
-    this.state = { history: props.history, list: {} }
-    this.state.list = {
-      'employeeName': ['Mayur', 'Priya', 'Unnati'],
+    this.state= {
       'month': ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'year': ['2018', '2017', '2016', '2015']
     };
+  }
+
+  componentDidMount=()=>{
+    this.props.loadEmployeeInfo();
+    this.props.loadAttendanceInfo();
   }
 
   onChangeHandler=(e)=> {
@@ -34,7 +44,7 @@ export default class History extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name='employeeName' onChange={this.onChangeHandler}>
-                    {this.state.list.employeeName.map((employeeName, i) => <option key={i} value={employeeName} >{employeeName}</option>)}
+                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -42,7 +52,7 @@ export default class History extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
-                    {this.state.list.month.map((month, i) => <option key={i} value={month} >{month}</option>)}
+                    {this.state.month.map((month, i) => <option key={i} value={month} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -50,7 +60,7 @@ export default class History extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
-                    {this.state.list.year.map((year, i) => <option key={i} value={year} >{year}</option>)}
+                    {this.state.year.map((year, i) => <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -72,7 +82,7 @@ export default class History extends React.Component {
                       {this.props.tableHeader.date}
                     </th>
                     <th>
-                      {this.props.tableHeader.name}
+                      {this.props.tableHeader.employeeName}
                     </th>
                     <th>
                       {this.props.tableHeader.timeIn}
@@ -83,24 +93,16 @@ export default class History extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>10/30/2018</td>
-                    <td>Mayur</td>
-                    <td>9:00 AM</td>
-                    <td>7:00 PM</td>
-                  </tr>
-                  <tr>
-                    <td>10/30/2018</td>
-                    <td>Priya</td>
-                    <td>9:00 AM</td>
-                    <td>7:00 PM</td>
-                  </tr>
-                  <tr>
-                    <td>10/30/2018</td>
-                    <td>Unnati</td>
-                    <td>9:00 AM</td>
-                    <td>7:00 PM</td>
-                  </tr>
+                  {this.props.attendances.map((user, id) => {
+                    return (
+                      <tr key={user.id}>
+                        <td></td>
+                        <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
+                        <td>{user.timeInDate}</td>
+                        <td>{user.timeOutDate}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
             </Col>
@@ -111,11 +113,16 @@ export default class History extends React.Component {
   }
 }
 
-History.defaultProps = {
-  tableHeader: {
-    'date': 'Date',
-    'name': 'Name',
-    'timeIn': 'Time-In',
-    'timeOut': 'Time-Out'
-  }
-}
+const mapStateToProps = state => ({
+  employeeList: state.app.employees,
+  tableHeader : state.app.attendancesHeaders,
+  attendances :state.app.attendances
+})
+
+export default withRouter(connect(
+  mapStateToProps,
+  dispatch => bindActionCreators({
+      loadAttendanceInfo,loadEmployeeInfo
+  }, dispatch)
+)(History));
+

@@ -7,16 +7,17 @@ import queryString from 'query-string';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadUserInfo ,loadEmployeeInfo , addUserInfo } from '../actions';
+import { loadUserInfo , addUserInfo } from '../actions/userActions';
+import {loadEmployeeInfo} from '../actions/employeeActions'
 
 class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userObj: {
-                'employee': "",
                 'userName': "",
-                'password': ""
+                'password': "",
+                'confirmPassword':""  
             }
         }
     }
@@ -66,7 +67,8 @@ class User extends Component {
             div.className = "mb-10";
         }
         const { userObj } = this.state;
-        userObj["employee"] = name;
+        userObj["employee"] = { "id": id,"firstName" : selectedEmployee[0].firstName , "lastName" : selectedEmployee[0].lastName };
+        userObj[e.target.name] = e.target.value;
         this.setState({userObj})
         console.log(this.state);
     }
@@ -76,12 +78,21 @@ class User extends Component {
         div.innerHTML = "";
         div.removeAttribute("class");
         document.getElementById("select").selectedIndex = 0;
+        this.setState((state) => {
+            state.userObj = {
+                'userName': "",
+                'password': "",
+                'confirmPassword' :""
+            }
+            return state;
+        })
     }
 
     onSubmit = (e) => {
         const { addUserInfo, history } = this.props;
-        
-        if(this.state.password === this.state.confirmPassword ){
+        e.preventDefault();
+        if(this.state.userObj.password === this.state.userObj.confirmPassword ){
+           
             addUserInfo(this.state.userObj, (error) => {
                 if (!error) {
                     history.push('./userlist');
@@ -90,12 +101,13 @@ class User extends Component {
                     this.setState({ isLoading: false })
                     console.error(error);
                 }
+                console.log(this.state);
             });
         }
         else{
             window.alert("password must be same");
         }
-        console.log(this.state);
+        console.log(this.state.userObj);
     }
 
     render() {
@@ -132,7 +144,7 @@ class User extends Component {
                                     <b>User Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userName}  required></FormControl>
+                                    <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userObj.userName}  required></FormControl>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -140,7 +152,7 @@ class User extends Component {
                                     <b>Password</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="password" id="password" name="password" onChange={this.handleChange} value={this.state.password} required></FormControl>
+                                    <FormControl type="password" id="password" name="password" onChange={this.handleChange} value={this.state.userObj.password} required></FormControl>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -148,7 +160,7 @@ class User extends Component {
                                     <b>Confirm Password</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="password" id="confirmPassword" name="confirmPassword" onChange={this.handleChange} value={this.state.confirmPassword} required></FormControl>
+                                    <FormControl type="password" id="confirmPassword" name="confirmPassword" onChange={this.handleChange} value={this.state.userObj.confirmPassword} required></FormControl>
                                 </Col>
                             </FormGroup>
                             <div align="center" className="mt-30">

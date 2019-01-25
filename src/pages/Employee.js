@@ -8,7 +8,7 @@ import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar.js';
-import { updateEmployeeInfo, addEmployeeInfo } from '../actions';
+import { updateEmployeeInfo, addEmployeeInfo } from '../actions/employeeActions';
 
 const cookies = new Cookies();
 

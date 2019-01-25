@@ -9,8 +9,8 @@ const initialState = {
         "userName" : "User Name",
         "role" : "Role",
         "department" : "Department",
-        "edit" : "Edit",
-        "delete" : "Delete"
+        'edit': 'Edit',
+        'delete': 'Delete'
     },
     employee: {},
     employees: [],
@@ -24,11 +24,21 @@ const initialState = {
         'contact': 'Phone Number',
         'edit': 'Edit',
         'delete': 'Delete'
+    },
+    attendance : {},
+    attendances : [],
+    attendancesHeaders : {
+        'date' : 'Date',
+        'employeeName' : 'Employee Name',
+        'timeIn' : 'Time In',
+        'timeOut' : 'Time Out'
     }
 }
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
+
+        //--Employee--//
         case types.FETCH_EMPLOYEE:
             return {
                 ...state,
@@ -55,6 +65,8 @@ const reducer = (state = initialState, action) => {
                 return employee;
             })
         };
+
+        //--User--//
         case types.FETCH_USERS:
         return {
             ...state,
@@ -71,6 +83,18 @@ const reducer = (state = initialState, action) => {
             userList: state.employees.filter(user =>
                 user.id !== action.payload)
             };
+
+        //--Attendance--//  
+        case types.GET_ALL_ATTENDANCE:
+        return {
+            ...state,
+            attendances: action.payload,
+        }; case types.ADD_ATTENDANCE:
+        return {
+            ...state,
+            attendance: action.payload,
+        };
+
         default:
             return state;
     }
