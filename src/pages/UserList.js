@@ -88,9 +88,6 @@ class UserList extends React.Component{
                                                     <td>{user.userName}</td>
                                                     <td>{user.role}</td>
                                                     <td></td>
-                                                    
-                                                    <td><Link to={{pathname: "/user",search : "id=" +user.id }} className="icon-button"><Glyphicon glyph="edit"  /></Link> </td>
-                                                    <td  onClick={()=>{this.setState({show:true,id : user.id})}}><Glyphicon glyph="remove" /> </td>
                                                 </tr>
                                             );
                                         })}
