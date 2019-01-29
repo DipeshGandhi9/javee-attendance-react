@@ -22,7 +22,6 @@ class UserList extends React.Component {
         }
     }
     componentDidMount() {
-        console.log("componentDidMount UserList")
         this.props.loadUserInfo();
     }
 
@@ -31,7 +30,6 @@ class UserList extends React.Component {
     }
 
     deleteUser = (e, id) => {
-
         this.props.deleteUserInfo(id);
         this.setState({ show: false });
     }
@@ -92,7 +90,7 @@ class UserList extends React.Component {
                                                     <td>{user.userName}</td>
                                                     <td>{user.role}</td>
                                                     <td></td>
-                                                    <td>{user.role === "ADMIN" ? "" : <Link to={{ pathname: "/user", search: "id=" + user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
+                                                    <td>{user.role === "ADMIN" ? "" : <Link to={{pathname: "/user",search : "id=" +user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
                                                     <td >{user.role === "ADMIN" ? "" : <Glyphicon glyph="remove" onClick={() => { this.setState({ show: true, id: user.id }) }} />} </td>
                                                 </tr>
                                             );
@@ -113,8 +111,8 @@ class UserList extends React.Component {
                             </Modal.Body>
                         <Modal.Footer>
                             <div>
-                                <Button className="button" onClick={(e) => this.deleteUser(e, this.state.id)}>CONFIRM</Button>
-                                <Button className="button" onClick={this.onhandleHide}>CANCLE</Button>
+                                <Button className="delete-modal-button" onClick={(e) => this.deleteUser(e, this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                         </Modal.Footer>
                     </Modal>

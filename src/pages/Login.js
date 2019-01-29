@@ -3,11 +3,12 @@ import { Button, ButtonToolbar, Row, Col, Image, Modal, Grid, Form, FormGroup, F
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import Moment from 'moment';
 
 import './Pages.css';
 
 import {authUser} from '../actions/userActions';
-import {addAttendanceInfo} from '../actions/attendanceActions';
+import {addAttendance , updateAttendance} from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
 
 class Login extends Component {
@@ -15,13 +16,13 @@ class Login extends Component {
     super(props);
 
     this.state = {
-    
+      attendanceObj:{
+        'userName': '',
+        'password': ''
+      },
       show: false,
-      'username': '',
-      'password': '',
       isLoggedIn: true,
       isLoggedOut : true,
-      'date': new Date().toLocaleString(),
       showSiteLogin : false,
       submitted : false
   }
@@ -43,26 +44,44 @@ class Login extends Component {
     this.setState({ show: false , showSiteLogin : false });
   }
 
-  onSiteLoginClick=(e)=>{
-    if(this.state.username && this.state.password)  {
-      this.props.authUser(this.state.username,this.state.password);    
-      this.setState({showSiteLogin : false}); 
-      window.open("./dashboard","_SELF");
+  onSiteLoginClick=()=>{
+      this.props.authUser(this.state.attendanceObj.userName,this.state.attendanceObj.password ,(error)=>{
+        if(!error){
+          this.setState({showSiteLogin : false}); 
+          window.open("./dashboard","_SELF");
+        }
+        else{
+          console.error(error);  
+        }
+      });    
+  }
+
+  onLoginClick = () => {
+    const { attendanceObj } = this.state;
+    if (this.state.isLoggedIn === false) {
+      attendanceObj["timeOutDate"] = new Date();
+      this.setState({ attendanceObj });
+      this.setState({ show: false, isLoggedIn: true });
+      document.getElementById("timeout").innerHTML = "Time Out : " + Moment(this.state.attendanceObj.timeOutDate).format('h:mm:ss a');
+      this.props.updateAttendance(this.state.attendanceObj);
+    }
+    else {
+      attendanceObj["employee"] = { "id": "1", "firstName": "Unnati", "lastName": "Modi" };
+      attendanceObj["date"] = new Date();
+      attendanceObj["timeInDate"] = new Date();
+      this.setState({ attendanceObj });
+      this.setState({ show: false, isLoggedIn: false });
+      console.log(this.state);
+      document.getElementById("user").innerHTML = "User Name : " + this.state.attendanceObj.userName;
+      document.getElementById("timein").innerHTML = "Time In : " + Moment(this.state.attendanceObj.timeInDate).format('h:mm:ss a');
+      this.props.addAttendance(this.state.attendanceObj);
     }
   }
 
-  onLoginClick=()=> { 
-   
-    this.props.authUser(this.state.username,this.state.password);
-    
-      this.setState({ show: false ,isLoggedIn: false , 'timeInDate' : new Date().toUTCString() });
-      document.getElementById("user").innerHTML = "User Name : " + this.state.username;
-      document.getElementById("timein").innerHTML = "Time In : " + this.state.date; 
-      this.props.addAttendanceInfo(this.state);
-  }
-
   handleChange=(e)=> {
-    this.setState({ [e.target.id]: e.target.value });
+    const { attendanceObj } = this.state;
+    attendanceObj[e.target.name] = e.target.value;
+    this.setState({ attendanceObj })
   }
 
   render() {
@@ -103,7 +122,7 @@ class Login extends Component {
                     <b>Username</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus"/>
+                    <FormControl type="text" id="userName" name="userName" value={this.state.attendanceObj.userName} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus"/>
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
@@ -111,7 +130,7 @@ class Login extends Component {
                     <b>Password</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange}  onKeyPress={this.onLoginKeyPress} autoComplete="off"/>
+                    <FormControl type="password" id="password" name="password" value={this.state.attendanceObj.password} onChange={this.handleChange}  onKeyPress={this.onLoginKeyPress} autoComplete="off"/>
                   </Col>
                 </FormGroup>
               </Form>
@@ -134,7 +153,7 @@ class Login extends Component {
                     <b>Username</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="text" id="username" value={this.state.username} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" />
+                    <FormControl type="text" id="userName" name="userName" value={this.state.attendanceObj.userName} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" />
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
@@ -142,7 +161,7 @@ class Login extends Component {
                     <b>Password</b>
                   </Col>
                   <Col lg={10} md={10} sm={10} xs={12}>
-                    <FormControl type="password" id="password" value={this.state.password} onChange={this.handleChange} onKeyPress={this.onSiteLoginKeyPress } autoComplete="off" />
+                    <FormControl type="password" id="password" name="password" value={this.state.attendanceObj.password} onChange={this.handleChange} onKeyPress={this.onSiteLoginKeyPress } autoComplete="off" />
                   </Col>
                 </FormGroup>
               </Form>
@@ -171,11 +190,12 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
+  employeeList : state.app.employees,
 })
 
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-    authUser,addAttendanceInfo
+    authUser,addAttendance,updateAttendance
   },dispatch)
 )(Login));

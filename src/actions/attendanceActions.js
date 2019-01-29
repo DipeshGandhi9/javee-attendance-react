@@ -1,13 +1,13 @@
 import Cookies from 'universal-cookie';
 
-import {API_URL, GET_ALL_ATTENDANCE ,ADD_ATTENDANCE} from '../store/constants.js';
+import {API_URL, GET_ALL_ATTENDANCE ,ADD_ATTENDANCE , UPDATE_ATTENDANCE} from '../store/constants.js';
 
 const cookies = new Cookies();
 
 const token = "Bearer " + cookies.get('token');
 console.log(token);
 
-export const loadAttendanceInfo = () => dispach => {
+export const loadAttendance = () => dispach => {
     fetch(API_URL + 'api/attendance/', { method: 'GET' , headers: { "Authorization": token }})
       .then(response => response.json())
       .then(json => {
@@ -25,7 +25,7 @@ export const loadAttendanceInfo = () => dispach => {
       });
   }
 
-  export const addAttendanceInfo = (attendance) => dispach => {
+  export const addAttendance = (attendance ) => dispach => {
     fetch(API_URL + 'api/attendance/', {
       method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
       body: JSON.stringify(attendance)
@@ -43,5 +43,32 @@ export const loadAttendanceInfo = () => dispach => {
           type: ADD_ATTENDANCE,
           payload: {}
         });
+      });
+  }
+
+  export const updateAttendance = (attendance, cb) => dispach => {
+    fetch(API_URL + 'api/attendance/' + attendance.employee.id, {
+      method: 'PUT', body: JSON.stringify(attendance),
+      headers: { 'Content-Type': 'application/json', "Authorization": token }, credentials: 'same-origin'
+    })
+      .then(response => response)
+      .then(json => {
+        console.log(json);
+        dispach({
+          type: UPDATE_ATTENDANCE,
+          payload: attendance
+        });
+        if (typeof cb === "function") {
+          cb();
+        }
+      })
+      .catch(eror => {
+        dispach({
+          type: UPDATE_ATTENDANCE,
+          payload: []
+        });
+        if (typeof cb === "function") {
+          cb(eror);
+        }
       });
   }

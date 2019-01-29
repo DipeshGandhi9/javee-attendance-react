@@ -122,8 +122,8 @@ class EmployeeList extends React.Component {
                             </Modal.Body>
                             <Modal.Footer>
                             <div>
-                                <Button className="button" onClick={(e)=>this.deleteEmployee(e,this.state.id)}>CONFIRM</Button>
-                                <Button className="button" onClick={this.onhandleHide}>CANCLE</Button>
+                                <Button className="delete-modal-button" onClick={(e)=>this.deleteEmployee(e,this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                             </Modal.Footer>
                     </Modal>

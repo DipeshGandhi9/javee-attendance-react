@@ -57,6 +57,10 @@
   background-color: #48ac33 !important;
   color : #fff;
 }
+.delete-modal-button{
+  color: white !important;
+  background-color: #DC483D !important;
+}
 .icon-button{
   color:#333 !important;
   cursor : context-menu;

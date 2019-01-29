@@ -53,9 +53,10 @@ class SideNavBar extends Component {
           title={<img src={require("../assets/images/sidebar-logo.png")} width="140" alt="Javee Infotech"></img>}
           items={
             [<Link to="dashboard"><div onClick={this.CloseSideNav}><Glyphicon glyph="th-large" className="mr-15"></Glyphicon>DashBoard</div></Link>,
+            <Link to="attendance"><div onClick={this.CloseSideNav}><Glyphicon glyph="align-center" className="mr-15"></Glyphicon>Attendance</div></Link>,
              <Link to="employeelist"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>Employee</div></Link>,
-             <Link to="attendance"><div onClick={this.CloseSideNav}><Glyphicon glyph="align-center" className="mr-15"></Glyphicon>Attendance</div></Link>,
-             <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="lock" className="mr-15"></Glyphicon>User</div></Link>
+             <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="lock" className="mr-15"></Glyphicon>User</div></Link>,
+             <Link to="calendar"><div onClick={this.CloseSideNav}><Glyphicon glyph="calendar" className="mr-15"></Glyphicon>Calendar</div></Link>
             ]
           }
           titleStyle={{ backgroundColor: '#fff', textAlign: "center" }}

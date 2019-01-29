@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import queryString from 'query-string';
+import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadUserInfo , addUserInfo } from '../actions/userActions';
+import { loadUserInfo , addUserInfo ,updateUserInfo} from '../actions/userActions';
 import {loadEmployeeInfo} from '../actions/employeeActions'
+
+const cookies = new Cookies();
 
 class User extends Component {
     constructor(props) {
@@ -25,17 +28,19 @@ class User extends Component {
     componentDidMount() {
         this.props.loadEmployeeInfo();
         var queryParameters = queryString.parse(this.props.location.search);
+        console.log(this.state.userObj);
         if (queryParameters['id']) {
-            this.getEmployeeObj(queryParameters['id']);
+            this.getUserObj(queryParameters['id']);
         }
     }
 
-    getEmployeeObj = (id) => {
-        fetch(API_URL + 'api/user/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+localStorage.getItem('token')} })
+    getUserObj = (id) => {
+        fetch(API_URL + 'api/user/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
             .then(response => response.json())
             .then(userObj => {
                 this.setState((state) => {
-                    state.userObj = userObj;
+                    userObj.sort((a, b) => a.id - b.id);
+                    state.userObj.userName = userObj.userName;
                     return state;
                 })
             }
@@ -68,7 +73,6 @@ class User extends Component {
         }
         const { userObj } = this.state;
         userObj["employee"] = { "id": id,"firstName" : selectedEmployee[0].firstName , "lastName" : selectedEmployee[0].lastName };
-        userObj[e.target.name] = e.target.value;
         this.setState({userObj})
         console.log(this.state);
     }
@@ -91,20 +95,32 @@ class User extends Component {
     onSubmit = (e) => {
         const { addUserInfo, history } = this.props;
         e.preventDefault();
-        if(this.state.userObj.password === this.state.userObj.confirmPassword ){
-           
-            addUserInfo(this.state.userObj, (error) => {
-                if (!error) {
-                    history.push('./userlist');
-                }
-                else {
-                    this.setState({ isLoading: false })
-                    console.error(error);
-                }
-                console.log(this.state);
-            });
+        if (this.state.userObj.password === this.state.userObj.confirmPassword) {
+            if (this.state.employeeObj.id) {
+                updateUserInfo(this.state.userObj, (error) => {
+                    if (!error) {
+                        history.push('./userlist');
+                    }
+                    else {
+                        this.setState({ isLoading: false })
+                        console.error(error);
+                    }
+                });
+            }
+            else {
+                addUserInfo(this.state.userObj, (error) => {
+                    if (!error) {
+                        history.push('./userlist');
+                    }
+                    else {
+                        this.setState({ isLoading: false })
+                        console.error(error);
+                    }
+                });
+            }
+            console.log(this.state);
         }
-        else{
+        else {
             window.alert("password must be same");
         }
         console.log(this.state.userObj);
@@ -144,7 +160,7 @@ class User extends Component {
                                     <b>User Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userObj.userName}  required></FormControl>
+                                    <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userObj.userName} autoComplete="off" required></FormControl>
                                 </Col>
                             </FormGroup>
                             <FormGroup>
@@ -182,6 +198,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadUserInfo,loadEmployeeInfo,addUserInfo
+        loadUserInfo,loadEmployeeInfo,addUserInfo,updateUserInfo
     }, dispatch)
 )(User));

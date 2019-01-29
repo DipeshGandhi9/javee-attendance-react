@@ -10,7 +10,8 @@ import './index.css';
 
 import App from './App';
 import DashBoard from './pages/DashBoard';
-import Attendance from './pages/Attendance'
+import Attendance from './pages/Attendance';
+import Calendar from './pages/Calendar';
 import createStore from './store/config';
 import Employee from './pages/Employee';
 import EmployeeList from './pages/EmployeeList';
@@ -26,7 +27,8 @@ const Application = (
        <Route exact path="/" component={App}></Route>  
          <Route path="/employee" component={Employee}></Route> 
          <Route path="/employeelist" component={EmployeeList}></Route>              
-         <Route path= "/attendance" component={Attendance}></Route>      
+         <Route path= "/attendance" component={Attendance}></Route>  
+         <Route path= "/calendar" component={Calendar}></Route>     
         <Route path="/dashboard"  component={DashBoard}></Route>
         <Route path="/user" component={User}></Route>
         <Route path="/userlist" component={UserList}></Route>

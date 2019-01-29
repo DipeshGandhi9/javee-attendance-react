@@ -3,15 +3,16 @@ import { Button, Form, Grid, FormControl, Row, Col, Table, Glyphicon } from 'rea
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
+import Moment from 'moment';
 
 import './Pages.css';
 
 import SideNavBar from '../components/SideNavBar.js';
-import { loadAttendanceInfo  } from '../actions/attendanceActions';
+import { loadAttendance  } from '../actions/attendanceActions';
 import {loadEmployeeInfo} from '../actions/employeeActions'
 
 
-class History extends React.Component {
+class Attendance extends React.Component {
   constructor(props) {
     super(props);
     
@@ -23,7 +24,7 @@ class History extends React.Component {
 
   componentDidMount=()=>{
     this.props.loadEmployeeInfo();
-    this.props.loadAttendanceInfo();
+    this.props.loadAttendance();
   }
 
   onChangeHandler=(e)=> {
@@ -94,12 +95,14 @@ class History extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.attendances.map((user, id) => {
+                    console.log({user});
+                    console.log()
                     return (
                       <tr key={user.id}>
-                        <td></td>
+                        <td>{Moment(user.date).format('DD-MM-YYYY')}</td>
                         <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
-                        <td>{user.timeInDate}</td>
-                        <td>{user.timeOutDate}</td>
+                        <td>{user.timeInDate ? Moment(user.timeInDate).format('h:mm:ss a'):""}</td>
+                        <td>{user.timeOutDate ? Moment(user.timeOutDate).format('h:mm:ss a'):""}</td>
                       </tr>
                     );
                   })}
@@ -122,7 +125,7 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-      loadAttendanceInfo,loadEmployeeInfo
+      loadAttendance,loadEmployeeInfo
   }, dispatch)
-)(History));
+)(Attendance));
 

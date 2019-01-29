@@ -80,9 +80,20 @@ const reducer = (state = initialState, action) => {
         case types.REMOVE_FETCH_USER:
         return {
             ...state,
-            userList: state.employees.filter(user =>
+            userList: state.userList.filter(user =>
                 user.id !== action.payload)
-            };
+        };
+        case types.UPDATE_FETCH_USER:
+        return {
+            ...state,
+            userList: state.userList.map(user =>{
+                if(user.id === parseInt(action.payload.id,10)){
+                 user = action.payload
+                }
+                return user;
+            })
+        };
+
 
         //--Attendance--//  
         case types.GET_ALL_ATTENDANCE:
@@ -93,6 +104,16 @@ const reducer = (state = initialState, action) => {
         return {
             ...state,
             attendance: action.payload,
+        };
+        case types.UPDATE_ATTENDANCE:
+        return {
+            ...state,
+            attendances: state.attendances.map(attendance =>{
+                if(attendance.id === parseInt(action.payload.id,10)){
+                 attendance = action.payload
+                }
+                return attendance;
+            })
         };
 
         default:

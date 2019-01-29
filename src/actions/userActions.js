@@ -1,6 +1,6 @@
 import Cookies from 'universal-cookie';
 
-import { API_URL, FETCH_USERS ,FETCH_USER , REMOVE_FETCH_USER} from '../store/constants.js';
+import { API_URL, FETCH_USERS ,FETCH_USER , REMOVE_FETCH_USER ,UPDATE_FETCH_USER} from '../store/constants.js';
 
 const cookies = new Cookies();
 
@@ -69,7 +69,33 @@ export const loadUserInfo = () => dispach => {
       });
   }
 
-  export const authUser = (userName, password) => dispach => {
+  export const updateUserInfo = (user, cb) => dispach => {
+    fetch(API_URL + 'api/user/' + user.id, {
+      method: 'PUT', body: JSON.stringify(user),
+      headers: { 'Content-Type': 'application/json', "Authorization": token }, credentials: 'same-origin'
+    })
+      .then(response => response)
+      .then(json => {
+        dispach({
+          type: UPDATE_FETCH_USER,
+          payload: user
+        });
+        if (typeof cb === "function") {
+          cb();
+        }
+      })
+      .catch(eror => {
+        dispach({
+          type: UPDATE_FETCH_USER,
+          payload: []
+        });
+        if (typeof cb === "function") {
+          cb(eror);
+        }
+      });
+  }
+
+  export const authUser = (userName, password,cb) => dispach => {
       fetch(API_URL + 'authenticate', {
         method: 'POST', body: JSON.stringify({ userName, password }),
         headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin' })
@@ -78,9 +104,15 @@ export const loadUserInfo = () => dispach => {
             cookies.remove('token');
             cookies.set('token', json.accessToken,{expires: new Date(Date.now()+2592000)});
             console.log(json.accessToken);
+            if (typeof cb === "function") {
+              cb();
+            }
           })
           .catch(eror => {
             console.log(eror);
+            if (typeof cb === "function") {
+              cb(eror);
+            }
         });
   }
   
