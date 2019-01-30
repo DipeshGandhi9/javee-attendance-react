@@ -39,7 +39,6 @@ class User extends Component {
             .then(response => response.json())
             .then(userObj => {
                 this.setState((state) => {
-                    userObj.sort((a, b) => a.id - b.id);
                     state.userObj.userName = userObj.userName;
                     return state;
                 })
@@ -96,7 +95,7 @@ class User extends Component {
         const { addUserInfo, history } = this.props;
         e.preventDefault();
         if (this.state.userObj.password === this.state.userObj.confirmPassword) {
-            if (this.state.employeeObj.id) {
+            if (this.state.userObj.id) {
                 updateUserInfo(this.state.userObj, (error) => {
                     if (!error) {
                         history.push('./userlist');

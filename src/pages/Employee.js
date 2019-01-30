@@ -39,7 +39,6 @@ class Employee extends Component {
         fetch(API_URL + 'api/employee/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
             .then(response => response.json())
             .then(employeeObj => {
-                employeeObj.sort((a, b) => a.id - b.id);
                 this.setState((state) => {
                     state.employeeObj = employeeObj;
                     return state;
