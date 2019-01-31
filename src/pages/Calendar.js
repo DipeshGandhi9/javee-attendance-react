@@ -43,18 +43,26 @@ class Calendar extends React.Component {
 
     let startDate = new Date(this.state.calenderObj.month + "-01-" + this.state.calenderObj.year);
     let currentMonth = startDate.getMonth() + 1;
-
+  
     while ((this.state.calenderObj.month !== "") && (this.state.calenderObj.year !== "") && (currentMonth === this.state.calenderObj.month)) {
-      
+      let weekDay =this.state.weekDays[new Date(new Date(startDate).getTime() - 24 * 60 * 60 * 1000).getDay()];
       let col = document.createElement("div");
-      col.className = "col-xs-6 col-sm-4 col-md-3 col-lg-2";
 
       let card = document.createElement("div");
       card.className = "card mt-10 mb-10";
-      
+
       let cardData = document.createElement("div");
-      cardData.className = "card-text";
-      cardData.innerHTML = startDate.getDate() + "  " + this.state.weekDays[new Date(new Date(startDate).getTime() - 24 * 60 * 60 * 1000).getDay()];
+      
+      if(weekDay === "Sun" ){
+        col.className = "column fullColumn";
+        cardData.className = "card-text sunday-card";
+      }
+      else{
+        col.className = "column";
+        cardData.className = "card-text weekday-card";
+      }
+
+      cardData.innerHTML = startDate.getDate() + "  " + weekDay;
       
       card.appendChild(cardData);
       col.appendChild(card);
@@ -122,6 +130,7 @@ class Calendar extends React.Component {
     );
   }
 }
+ 
 const mapStateToProps = state => ({
   employeeList: state.app.employees
 })

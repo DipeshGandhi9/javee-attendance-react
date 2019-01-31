@@ -96,11 +96,33 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   height : 120px; 
   background-color: #f1f1f1;
+ 
 }
 .card-text {
   padding: 12px;
   background-color: #fff;
-  border-bottom:3px solid #DC483D;
   color : #294e9d;
   font-weight: bold;
+  
 }
+.weekday-card{
+  border-bottom:3px solid #48ac33;
+}
+.sunday-card{
+  border-bottom:3px solid #DC483D;
+}
+.column {
+  float: left;
+  width: 14.28571428571429%;
+  padding: 0 10px;
+}
+@media screen and (max-width : 425px){
+  .column{
+    width:50%;
+  }
+  .fullColumn{
+    width: 100%;
+  }
+} 
+
+
