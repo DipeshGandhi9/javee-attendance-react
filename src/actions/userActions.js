@@ -101,9 +101,9 @@ export const loadUserInfo = () => dispach => {
         headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin' })
         .then(response => response.json())
         .then(json => {
+            cookies.set('userName',userName);
             cookies.remove('token');
             cookies.set('token', json.accessToken,{expires: new Date(Date.now()+2592000)});
-            console.log(json.accessToken);
             if (typeof cb === "function") {
               cb();
             }

@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import { Glyphicon, Navbar, Row, Col } from "react-bootstrap";
 import SideNav from 'react-simple-sidenav';
 import { Link } from 'react-router-dom';
+import Cookies from 'universal-cookie';
 
 import './SideNavBar.css';
 import '../global.css';
+
+const cookies = new Cookies();
 
 class SideNavBar extends Component {
   constructor(props) {
@@ -18,12 +21,17 @@ class SideNavBar extends Component {
     this.setState({ showNav: false })
   }
 
+  removeUserName = () =>{
+    cookies.remove('userName');
+  }
+
   render() {
+    const userName = cookies.get('userName');
     return (
       <div>
         <Navbar fluid >
           <Row>
-            <Col xs={7}>
+            <Col xs={5} sm={7}>
               <Navbar.Header>
                 <div className="flex ml-20">
                   <div>
@@ -35,12 +43,16 @@ class SideNavBar extends Component {
                 </div>
               </Navbar.Header>
             </Col>
-            <Col xs={5}>
-              <Navbar.Text pullRight className="pl-10 pr-10">
+            <Col xs={7} sm={5}>
+              <Navbar.Text pullRight className="pl-10 pr-10" onClick={this.removeUserName}>
                 <Link to="">
                   <Glyphicon glyph="log-out" style={{ right: "5px", top: "2px" }}></Glyphicon>
-                  Logout
+                  <span>Logout</span>
                 </Link>
+              </Navbar.Text>
+              <Navbar.Text pullRight className="pl-10 text">
+              <Glyphicon glyph="user" style={{ right: "5px", top: "2px" }}></Glyphicon>
+                <span className="userName">{userName}</span>
               </Navbar.Text>
             </Col>
           </Row>
