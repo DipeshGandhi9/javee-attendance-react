@@ -8,8 +8,8 @@ import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadUserInfo , addUserInfo ,updateUserInfo} from '../actions/userActions';
-import {loadEmployeeInfo} from '../actions/employeeActions'
+import { loadUserInfo, addUserInfo, updateUserInfo } from '../actions/userActions';
+import { loadEmployeeInfo } from '../actions/employeeActions'
 
 const cookies = new Cookies();
 
@@ -18,9 +18,14 @@ class User extends Component {
         super(props);
         this.state = {
             userObj: {
+                "employee": {
+                    "firstName": "",
+                    "lastName": "",
+                    "id": ""
+                },
                 'userName': "",
                 'password': "",
-                'confirmPassword':""  
+                'confirmPassword': ""
             }
         }
     }
@@ -28,22 +33,39 @@ class User extends Component {
     componentDidMount() {
         this.props.loadEmployeeInfo();
         var queryParameters = queryString.parse(this.props.location.search);
-        console.log(this.state.userObj);
+
         if (queryParameters['id']) {
             this.getUserObj(queryParameters['id']);
+
         }
+        console.log(this.state);
     }
 
     getUserObj = (id) => {
-        fetch(API_URL + 'api/user/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
+        var div = document.getElementById("id");
+        fetch(API_URL + 'api/user/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(userObj => {
                 this.setState((state) => {
                     state.userObj.userName = userObj.userName;
+                    // state.userObj.password = userObj.password;
+                    // state.userObj.confirmPassword ="";
+                    state.userObj.id = userObj.id;
+                    state.userObj.employee.id = userObj.employee.id;
+                    state.userObj.employee.firstName = userObj.employee.firstName;
+                    state.userObj.employee.lastName = userObj.employee.lastName;
+                    // state.selectedValue = userObj.employee.id;
+                    let name = userObj.employee.firstName + " " + userObj.employee.lastName;
+                    console.log(state.userObj.employee);
+                    document.getElementById("select").options[userObj.employee.id].selected = true;
+                    div.innerHTML = "Id : " + userObj.employee.id + "&nbsp;&nbsp; Name : " + name + " &nbsp;&nbsp;Department : ";
+                    div.className = "mb-10";
                     return state;
                 })
             }
-        )
+
+            );
+
     }
 
     handleChange = (e) => {
@@ -51,7 +73,6 @@ class User extends Component {
         userObj[e.target.name] = e.target.value;
         this.setState({ userObj })
     }
-
 
     onChangeHandeler = (e) => {
         var div = document.getElementById("id");
@@ -71,8 +92,8 @@ class User extends Component {
             div.className = "mb-10";
         }
         const { userObj } = this.state;
-        userObj["employee"] = { "id": id,"firstName" : selectedEmployee[0].firstName , "lastName" : selectedEmployee[0].lastName };
-        this.setState({userObj})
+        userObj["employee"] = { "id": id, "firstName": selectedEmployee[0].firstName, "lastName": selectedEmployee[0].lastName };
+        this.setState({ userObj })
         console.log(this.state);
     }
 
@@ -85,7 +106,7 @@ class User extends Component {
             state.userObj = {
                 'userName': "",
                 'password': "",
-                'confirmPassword' :""
+                'confirmPassword': ""
             }
             return state;
         })
@@ -95,13 +116,15 @@ class User extends Component {
         const { addUserInfo, history } = this.props;
         e.preventDefault();
         if (this.state.userObj.password === this.state.userObj.confirmPassword) {
+            console.log(this.state.userObj.id);
             if (this.state.userObj.id) {
+
                 updateUserInfo(this.state.userObj, (error) => {
+                    console.log(this.state.userObj.id)
                     if (!error) {
                         history.push('./userlist');
                     }
                     else {
-                        this.setState({ isLoading: false })
                         console.error(error);
                     }
                 });
@@ -131,15 +154,15 @@ class User extends Component {
                 <SideNavBar />
                 <Grid>
                     <Well className="m-auto mt-30" style={{ maxWidth: "600px" }}>
-                        <Form horizontal className="m-auto mt-50" onSubmit ={this.onSubmit}>
+                        <Form horizontal className="m-auto mt-50" onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Col sm={4} xs={12}>
                                     <b>Employee Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl componentClass="select"  id="select" onChange={this.onChangeHandeler} required >
+                                    <FormControl componentClass="select" id="select" onChange={this.onChangeHandeler} required >
                                         <option value=""></option>
-                                        {this.props.employeeList.map((employee,id) => {
+                                        {this.props.employeeList.map((employee, id) => {
                                             return (
                                                 <option key={id} value={employee.id} name={employee.firstName}>
                                                     {employee.firstName} {employee.lastName}
@@ -197,6 +220,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadUserInfo,loadEmployeeInfo,addUserInfo,updateUserInfo
+        loadUserInfo, loadEmployeeInfo, addUserInfo, updateUserInfo
     }, dispatch)
 )(User));

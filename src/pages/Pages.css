@@ -103,11 +103,22 @@
   color : #294e9d;
   font-weight: bold; 
 }
-.weekday-card{
+.card-text-sunday{
+  padding: 12px;
+  font-weight: bold; 
+  color : grey;
+}
+.presentday-card{
   border-bottom:3px solid #48ac33;
 }
-.sunday-card{
+.absentday-card{
   border-bottom:3px solid #DC483D;
+}
+.remainingday-card{
+  border-bottom:3px solid #294e9d !important;
+}
+.sunday-card{
+  border-bottom:3px solid grey;
 }
 .column {
   float: left;
@@ -130,5 +141,13 @@
     padding-right: 20px;
   }
 }
-
-
+@media screen and (max-width : 320px){
+  .text-size{
+    font-size: smaller;
+  }
+}
+@media screen and (min-width : 768px){
+  .text-size{
+    font-size: smaller;
+  }
+}

@@ -10,6 +10,7 @@ import './Pages.css';
 import {authUser} from '../actions/userActions';
 import {addAttendance , updateAttendance} from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
+import BreakTimeModal from './BreakTimeModal';
 
 class Login extends Component {
   constructor(props) {
@@ -63,7 +64,6 @@ class Login extends Component {
       this.setState({ attendanceObj });
       this.setState({ show: false, isLoggedIn: true });
       document.getElementById("timeout").innerHTML = "Time Out : " + Moment(this.state.attendanceObj.timeOutDate).format('h:mm:ss a');
-      this.props.updateAttendance(this.state.attendanceObj);
     }
     else {
       attendanceObj["employee"] = { "id": "1", "firstName": "Unnati", "lastName": "Modi" };
@@ -74,8 +74,9 @@ class Login extends Component {
       console.log(this.state);
       document.getElementById("user").innerHTML = "User Name : " + this.state.attendanceObj.userName;
       document.getElementById("timein").innerHTML = "Time In : " + Moment(this.state.attendanceObj.timeInDate).format('h:mm:ss a');
-      this.props.addAttendance(this.state.attendanceObj);
+     
     }
+    this.props.addAttendance(this.state.attendanceObj);
   }
 
   handleChange=(e)=> {
@@ -106,8 +107,14 @@ class Login extends Component {
               </Col>
               <Col xs={6} className="seperator">
                 <Button bsSize="large" id="login" className="button " onClick={() => this.setState({ show: true, 'username' : "" , 'password' : "" })} >{this.state.isLoggedIn  ? 'Login ' : 'Logout'}</Button>
+                <div>
+            {this.state.isLoggedIn ?
+              '' :
+              <BreakTimeModal/>}
+          </div>
               </Col>
             </ButtonToolbar>
+
           </Row>
 
           <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
