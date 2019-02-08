@@ -5,7 +5,6 @@ import { API_URL, FETCH_USERS ,FETCH_USER , REMOVE_FETCH_USER ,UPDATE_FETCH_USER
 const cookies = new Cookies();
 
 const token = "Bearer " + cookies.get('token');
-console.log(token);
 
 export const loadUserInfo = () => dispach => {
     fetch(API_URL + 'api/users/', { method: 'GET' , headers: { "Authorization": token }})

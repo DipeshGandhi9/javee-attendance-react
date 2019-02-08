@@ -16,7 +16,7 @@ class Calendar extends React.Component {
     super(props);
 
     let yearList = [];
-    var start = 1990;
+    var start = 2018;
     var end = new Date().getFullYear();
     for (var year = end; year >= start; year--) {
       yearList.push(year);
@@ -24,15 +24,67 @@ class Calendar extends React.Component {
     this.state = {
       yearList,
       calenderObj: {},
-      'month': ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'weekDays': ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+      currentMonth: "",
+      currentYear: "",
       userAttendance: {}
+
     };
   }
 
   componentDidMount = () => {
+    const { calenderObj } = this.state;
+
     this.props.loadEmployeeInfo();
     this.props.loadAttendance();
+    this.setState({
+      currentMonth: Moment(new Date()).format('MMMM'),
+      currentYear: Moment(new Date()).format('YYYY')
+    });
+    calenderObj["month"] = new Date().getMonth() + 1;
+    calenderObj["year"] = new Date().getFullYear();
+    this.setState({ calenderObj });
+    console.log(this.state);
+    this.calenderCard();
+
+  }
+
+  calenderCard = () => {
+    let startDate = new Date(this.state.calenderObj.month + "-01-" + this.state.calenderObj.year);
+    let currentMonth = startDate.getMonth() + 1;
+    while ((this.state.calenderObj.month !== "") && (this.state.calenderObj.year !== "") && (currentMonth === this.state.calenderObj.month)) {
+      let weekDay = this.state.weekDays[new Date(new Date(startDate).getTime() - 24 * 60 * 60 * 1000).getDay()];
+      let col = document.createElement("div");
+
+      let card = document.createElement("div");
+      card.className = "card mt-10 mb-10";
+
+      let cardDate = document.createElement("div");
+      let cardInfo = document.createElement("div");
+      if (weekDay === "Sun") {
+        col.className = "column fullColumn";
+        cardDate.className = "card-text-sunday sunday-card";
+      }
+      else {
+        col.className = "column";
+        if ((startDate.getDate() > new Date().getDate())) {
+          cardDate.className = "card-text remainingday-card";
+        } else {
+          cardDate.className = "card-text absentday-card";
+        }
+      }
+      cardDate.innerHTML = startDate.getDate() + "  " + weekDay;
+
+      card.appendChild(cardDate);
+      card.appendChild(cardInfo);
+      col.appendChild(card);
+      document.getElementById("date-card-box").appendChild(col);
+
+      let nextDate = new Date(new Date(startDate).getTime() + 24 * 60 * 60 * 1000);
+      startDate = nextDate;
+      currentMonth = startDate.getMonth() + 1;
+    }
   }
 
   onEmplopyeeChangeHandler = (e) => {
@@ -146,6 +198,8 @@ class Calendar extends React.Component {
 
   render() {
     const { yearList } = this.state;
+    let hasEmployee = false;
+    this.props.employeeList.map((employee) => hasEmployee = true)
     return (
       <div>
         <SideNavBar />
@@ -156,7 +210,7 @@ class Calendar extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name='employeeName' onChange={this.onEmplopyeeChangeHandler}>
-                    <option value=""></option>
+                    <option>{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
                     {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
                   </FormControl>
                 </Form>
@@ -165,8 +219,7 @@ class Calendar extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
-                    <option></option>
-                    {this.state.month.map((month, i) => <option key={i} value={i} >{month}</option>)}
+                    {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={i} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -174,8 +227,7 @@ class Calendar extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="year" onChange={this.onYearChangeHandler}>
-                    <option></option>
-                    {yearList.map((year, i) => <option key={i} value={year} >{year}</option>)}
+                    {yearList.map((year, i) => (this.state.currentYear === year.toString()) ? <option key={i} value={year} selected >{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>

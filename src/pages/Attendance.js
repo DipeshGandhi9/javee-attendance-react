@@ -17,24 +17,28 @@ class Attendance extends React.Component {
     super(props);
     
     this.state= {
-      'month': ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      'year': ['2018', '2017', '2016', '2015']
+      'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      'year': ['2019', '2018'],
+      currentMonth : "",
+      currentYear  : ""
     };
   }
 
   componentDidMount=()=>{
     this.props.loadEmployeeInfo();
     this.props.loadAttendance();
-  }
-
-  onChangeHandler=(e)=> {
-    this.setState((state) => {
-      state.history[e.target.name] = e.target.value;
-      return state;
+    this.setState({
+      currentMonth : Moment(new Date()).format('MMMM'),
+      currentYear : Moment(new Date()).format('YYYY')
     });
   }
 
+
   render() {
+    let hasEmployee = (this.props.employeeList.length !== 0 ) ? true : false;
+    let hasAttendances = (this.props.attendances.length !== 0 ) ? true : false;
+    
+    
     return (
       <div>
         <SideNavBar />
@@ -44,8 +48,9 @@ class Attendance extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name='employeeName' onChange={this.onChangeHandler}>
-                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>)}
+                  <FormControl componentClass="select" name='employeeName'>
+                  <option>--Select Employee--</option>
+                  { hasEmployee ? this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>) : <option>No Employees</option> } 
                   </FormControl>
                 </Form>
               </Col>
@@ -53,7 +58,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
-                    {this.state.month.map((month, i) => <option key={i} value={month} >{month}</option>)}
+                  {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={month} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -61,7 +66,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
-                    {this.state.year.map((year, i) => <option key={i} value={year} >{year}</option>)}
+                  {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={i} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -95,8 +100,7 @@ class Attendance extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.attendances.map((user, id) => {
-                    console.log({user});
-                    console.log()
+
                     return (
                       <tr key={user.id}>
                         <td>{Moment(user.date).format('DD-MM-YYYY')}</td>
@@ -111,6 +115,7 @@ class Attendance extends React.Component {
             </Col>
           </Row>
         </Grid>
+        {hasAttendances ? "" :<h4 align="center" style={{color : 'grey'}}> No Attendance are available to display.</h4>} 
       </div>
     );
   }

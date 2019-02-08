@@ -83,6 +83,7 @@ class UserList extends React.Component {
                                     </thead>
                                     <tbody>
                                         {this.props.userList.map((user, id) => {
+                                            console.log(this.props.userList);
                                             return (
                                                 <tr key={user.id}>
                                                     <td>{user.id}</td>

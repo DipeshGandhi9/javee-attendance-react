@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Grid, FormControl, Col, Well, Radio } from 'react-bootstrap';
+import { Button, Form, FormGroup, Grid, FormControl, Col, Well, Radio, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
@@ -34,9 +35,9 @@ class Employee extends Component {
             this.getEmployeeObj(queryParameters['id']);
         }
     }
-   
+
     getEmployeeObj = (id) => {
-        fetch(API_URL + 'api/employee/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
+        fetch(API_URL + 'api/employee/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(employeeObj => {
                 this.setState((state) => {
@@ -44,7 +45,7 @@ class Employee extends Component {
                     return state;
                 })
             }
-        )
+            )
     }
 
     handleChange = (e) => {
@@ -109,6 +110,17 @@ class Employee extends Component {
             <div>
                 <SideNavBar />
                 <Grid>
+                    <Row>
+                        <Col lg={12}>
+                            <div>
+                                <Link to="employeelist">
+                                    <Button className=" button pull-right">
+                                        Employee List
+                                        </Button>
+                                </Link>
+                            </div>
+                        </Col>
+                    </Row>
                     <Well className="m-auto mt-30" style={{ maxWidth: "600px" }}>
                         <Form horizontal className="m-auto mt-50" style={{ maxWidth: "450px" }} onSubmit={this.onSubmitClick}  >
                             <FormGroup>

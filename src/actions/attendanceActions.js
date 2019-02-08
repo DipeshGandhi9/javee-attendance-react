@@ -5,7 +5,6 @@ import {API_URL, GET_ALL_ATTENDANCE ,ADD_ATTENDANCE , UPDATE_ATTENDANCE} from '.
 const cookies = new Cookies();
 
 const token = "Bearer " + cookies.get('token');
-console.log(token);
 
 export const loadAttendance = () => dispach => {
     fetch(API_URL + 'api/attendance/', { method: 'GET' , headers: { "Authorization": token }})

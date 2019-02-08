@@ -54,7 +54,7 @@
   outline-offset: none !important;
 }
 .button.focus,.button:hover{
-  background-color: #DC483D !important;
+  background-color: #48ac33 !important;
   color : #fff;
 }
 .delete-modal-button{
@@ -150,4 +150,8 @@
   .text-size{
     font-size: smaller;
   }
+}
+.error{
+  color : #DC483D !important;
+  text-align: left !important;
 }
