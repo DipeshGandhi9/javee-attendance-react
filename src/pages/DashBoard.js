@@ -15,7 +15,7 @@ class DashBoard extends Component {
         };
     }
 
-    onChange=(date)=> {
+    onChange = (date) => {
         this.setState({ date });
     }
 

@@ -109,7 +109,7 @@ class Calendar extends React.Component {
   calendarCardGenerator = () => {
 
     document.getElementById("date-card-box").innerHTML = "";
-    if (this.props.attendance.length ===0) {
+    if (this.props.attendance.length === 0) {
       this.calenderCard();
     } else {
 
@@ -202,7 +202,7 @@ class Calendar extends React.Component {
 
   render() {
     const { yearList } = this.state;
-    let hasEmployee = (this.props.employeeList.length !== 0 ) ? true : false;
+    let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
     return (
       <div>
         <SideNavBar />

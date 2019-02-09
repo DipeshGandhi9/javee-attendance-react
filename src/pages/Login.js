@@ -52,7 +52,7 @@ class Login extends Component {
       this.props.authUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
           this.setState({ showSiteLogin: false });
-          window.open("/dashboard","_SELF");
+          window.open("/dashboard", "_SELF");
         }
         else {
           attendanceObj["errorMessage"] = "Invalid User Name and Password!";

@@ -8,37 +8,36 @@ import Moment from 'moment';
 import './Pages.css';
 
 import SideNavBar from '../components/SideNavBar.js';
-import { loadAttendance  } from '../actions/attendanceActions';
-import {loadEmployeeInfo} from '../actions/employeeActions'
+import { loadAttendance } from '../actions/attendanceActions';
+import { loadEmployeeInfo } from '../actions/employeeActions'
 
 
 class Attendance extends React.Component {
   constructor(props) {
     super(props);
-    
-    this.state= {
+
+    this.state = {
       'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'year': ['2019', '2018'],
-      currentMonth : "",
-      currentYear  : ""
+      currentMonth: "",
+      currentYear: ""
     };
   }
 
-  componentDidMount=()=>{
+  componentDidMount = () => {
     this.props.loadEmployeeInfo();
     this.props.loadAttendance();
     this.setState({
-      currentMonth : Moment(new Date()).format('MMMM'),
-      currentYear : Moment(new Date()).format('YYYY')
+      currentMonth: Moment(new Date()).format('MMMM'),
+      currentYear: Moment(new Date()).format('YYYY')
     });
   }
 
 
   render() {
-    let hasEmployee = (this.props.employeeList.length !== 0 ) ? true : false;
-    let hasAttendances = (this.props.attendances.length !== 0 ) ? true : false;
-    
-    
+    let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+    let hasAttendances = (this.props.attendances.length !== 0) ? true : false;
+
     return (
       <div>
         <SideNavBar />
@@ -49,8 +48,8 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name='employeeName'>
-                  <option>--Select Employee--</option>
-                  { hasEmployee ? this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>) : <option>No Employees</option> } 
+                    <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
+                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -58,7 +57,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
-                  {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={month} >{month}</option>)}
+                    {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={month} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -66,7 +65,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
-                  {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={i} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
+                    {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={i} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -99,14 +98,14 @@ class Attendance extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.props.attendances.map((user, id) => {
+                  {this.props.attendances.map((user) => {
 
                     return (
                       <tr key={user.id}>
                         <td>{Moment(user.date).format('DD-MM-YYYY')}</td>
                         <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
-                        <td>{user.timeInDate ? Moment(user.timeInDate).format('h:mm:ss a'):""}</td>
-                        <td>{user.timeOutDate ? Moment(user.timeOutDate).format('h:mm:ss a'):""}</td>
+                        <td>{user.timeInDate ? Moment(user.timeInDate).format('h:mm:ss a') : ""}</td>
+                        <td>{user.timeOutDate ? Moment(user.timeOutDate).format('h:mm:ss a') : ""}</td>
                       </tr>
                     );
                   })}
@@ -115,7 +114,7 @@ class Attendance extends React.Component {
             </Col>
           </Row>
         </Grid>
-        {hasAttendances ? "" :<h4 align="center" style={{color : 'grey'}}> No Attendance are available to display.</h4>} 
+        {hasAttendances ? "" : <h4 align="center" style={{ color: 'grey' }}> No Attendance are available to display.</h4>}
       </div>
     );
   }
@@ -123,14 +122,14 @@ class Attendance extends React.Component {
 
 const mapStateToProps = state => ({
   employeeList: state.app.employees,
-  tableHeader : state.app.attendancesHeaders,
-  attendances :state.app.attendances
+  tableHeader: state.app.attendancesHeaders,
+  attendances: state.app.attendances
 })
 
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-      loadAttendance,loadEmployeeInfo
+    loadAttendance, loadEmployeeInfo
   }, dispatch)
 )(Attendance));
 

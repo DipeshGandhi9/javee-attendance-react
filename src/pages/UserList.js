@@ -35,7 +35,7 @@ class UserList extends React.Component {
     }
 
     render() {
-        let hasUsers = (this.props.userList.length !== 0 ) ? true : false;
+        let hasUsers = (this.props.userList.length !== 0) ? true : false;
         return (
             <div>
                 <SideNavBar />
@@ -84,23 +84,23 @@ class UserList extends React.Component {
                                     </thead>
                                     <tbody>
                                         {this.props.userList.map((user, id) => {
-                                            return (
-                                                <tr key={user.id}>
-                                                    <td>{user.id}</td>
-                                                    <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
-                                                    <td>{user.userName}</td>
-                                                    <td>{user.role}</td>
-                                                    <td></td>
-                                                    <td>{user.role === "ADMIN" ? "" : <Link to={{pathname: "/user",search : "id=" +user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
-                                                    <td >{user.role === "ADMIN" ? "" : <Glyphicon glyph="remove" onClick={() => { this.setState({ show: true, id: user.id }) }} />} </td>
-                                                </tr>
-                                            );
-                                        })}
+                                                return (
+                                                    <tr key={user.id}>
+                                                        <td>{user.id}</td>
+                                                        <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
+                                                        <td>{user.userName}</td>
+                                                        <td>{user.role}</td>
+                                                        <td></td>
+                                                        <td>{user.role === "ADMIN" ? "" : <Link to={{ pathname: "/user", search: "id=" + user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
+                                                        <td >{user.role === "ADMIN" ? "" : <Glyphicon glyph="remove" onClick={() => { this.setState({ show: true, id: user.id }) }} />} </td>
+                                                    </tr>
+                                                );
+                                            })}
                                     </tbody>
                                 </Table>
                             </Col>
                         </Row>
-                        {hasUsers ? "" :<h4 align="center" style={{color : 'grey'}}> No Users are available to display. Please add new user</h4>}
+                        {hasUsers ? "" : <h4 align="center" style={{ color: 'grey' }}> No Users are available to display. Please add new user</h4>}
                     </div>
                     <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
                         <Modal.Header closeButton>

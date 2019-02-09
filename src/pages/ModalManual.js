@@ -15,15 +15,15 @@ class ModalManual extends Component {
     };
   }
 
-  handleHide=()=>{
+  handleHide = () => {
     this.setState({ show: false });
   }
 
-  handleChange=(e)=> {
+  handleChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit=()=> {
+  onSubmit = () => {
     if (this.state.reason !== "") {
       this.setState({ show: false });
       this.setState({ isLoggedIn: false });

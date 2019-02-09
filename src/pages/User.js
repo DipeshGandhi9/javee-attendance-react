@@ -19,11 +19,6 @@ class User extends Component {
         super(props);
         this.state = {
             userObj: {
-                "employee": {
-                    "firstName": "",
-                    "lastName": "",
-                    "id": ""
-                },
                 'userName': "",
                 'password': "",
                 'confirmPassword': ""
@@ -34,31 +29,27 @@ class User extends Component {
     componentDidMount() {
         this.props.loadEmployeeInfo();
         var queryParameters = queryString.parse(this.props.location.search);
-
         if (queryParameters['id']) {
             this.getUserObj(queryParameters['id']);
-
         }
-        console.log(this.state);
     }
 
     getUserObj = (id) => {
-       
         fetch(API_URL + 'api/user/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
-            .then(userObj => {
-                this.setState((state) => {
-                    state.userObj.userName = userObj.userName;
-                    state.userObj.id = userObj.id;
-                    state.userObj.employee.id = userObj.employee.id;
-                    state.userObj.employee.firstName = userObj.employee.firstName;
-                    state.userObj.employee.lastName = userObj.employee.lastName;
-                    return state;
-                })
+            .then(user => {
+                const { userObj } = this.state;
+                userObj["userName"] = user.userName;
+                userObj["id"] = user.id;
+                userObj["employee"] =
+                    {
+                        "id": user.employee.id,
+                        "firstName": user.employee.firstName,
+                        "lastName": user.employee.lastName
+                    }
+                this.setState({ userObj });
             }
-
             );
-
     }
 
     handleChange = (e) => {
@@ -68,22 +59,18 @@ class User extends Component {
     }
 
     onChangeHandeler = (e) => {
-        var div = document.getElementById("id");
+        const { userObj } = this.state;
         let id = e.target.value;
         let selectedEmployee = this.props.employeeList.filter(function (item) {
             return item.id.toString() === id;
         });
         if (id === "") {
-            div.innerHTML = "";
-            div.removeAttribute("class");
+            userObj["employee"] = "";
+            this.setState({ userObj });
         }
         else {
-            var name = selectedEmployee[0].firstName + " " + selectedEmployee[0].lastName;
-            div.innerHTML = "Id : " + id + "&nbsp;&nbsp; Name : " + name + " &nbsp;&nbsp;Department : ";
-            div.className = "mb-10";
-            const { userObj } = this.state;
             userObj["employee"] = { "id": id, "firstName": selectedEmployee[0].firstName, "lastName": selectedEmployee[0].lastName };
-            this.setState({ userObj })
+            this.setState({ userObj });
         }
     }
 
@@ -103,11 +90,10 @@ class User extends Component {
     }
 
     onSubmit = (e) => {
-        const { addUserInfo, history } = this.props;
+        const { addUserInfo, history, updateUserInfo } = this.props;
         e.preventDefault();
         if (this.state.userObj.password === this.state.userObj.confirmPassword) {
             if (this.state.userObj.id) {
-
                 updateUserInfo(this.state.userObj, (error) => {
                     if (!error) {
                         history.push('./userlist');
@@ -128,15 +114,20 @@ class User extends Component {
                     }
                 });
             }
-            console.log(this.state);
         }
         else {
-            window.alert("password must be same");
+            const { userObj } = this.state;
+            userObj["error"] = "Password and confirmed password must be same."
+            this.setState({ userObj });
         }
-        console.log(this.state.userObj);
     }
 
     render() {
+        let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+        let selectedEmployee = [];
+        for (var keyValue in this.state.userObj.employee) {
+            selectedEmployee.push(this.state.userObj.employee[keyValue]);
+        }
         return (
             <div>
                 <SideNavBar />
@@ -160,23 +151,25 @@ class User extends Component {
                                 </Col>
                                 <Col sm={8} xs={12}>
                                     <FormControl componentClass="select" id="select" onChange={this.onChangeHandeler} required >
-                                        <option value="" >--Select Employee--</option>
-                                        {this.props.employeeList.map((employee, id) => (this.state.employee.firstName === employee.firstName || this.state.employee.firstName==="")
-                                        ? <option key={id} value={employee.id} name={employee.firstName} selected>
-                                        {employee.firstName} {employee.lastName}
-                                    </option> : <option key={id} value={employee.id} name={employee.firstName}>
-                                        {employee.firstName} {employee.lastName}
-                                    </option>
-                                           
-                                               
-                                           
+                                        <option value="" >{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
+                                        {this.props.employeeList.map((employee, id) =>
+                                            (selectedEmployee[0] === employee.id) ?
+                                                <option key={id} value={employee.id} name={employee.firstName} selected>
+                                                    {employee.firstName} {employee.lastName}
+                                                </option> :
+
+                                                <option key={id} value={employee.id} name={employee.firstName}>
+                                                    {employee.firstName} {employee.lastName}
+                                                </option>
                                         )}
                                     </FormControl>
                                 </Col>
                             </FormGroup>
+
                             <Col sm={4} xs={12}></Col>
                             <Col sm={8} xs={12}>
-                                <div id="id"></div>
+                                {this.state.userObj.employee ?
+                                    <div className="mb-10">Id : {this.state.userObj.employee.id}  Name : {this.state.userObj.employee.firstName} {this.state.userObj.employee.lastName}  Department : </div> : ""}
                             </Col>
 
                             <FormGroup>
@@ -187,6 +180,7 @@ class User extends Component {
                                     <FormControl type="text" onChange={this.handleChange} name="userName" value={this.state.userObj.userName} autoComplete="off" required></FormControl>
                                 </Col>
                             </FormGroup>
+
                             <FormGroup>
                                 <Col sm={4} xs={12}>
                                     <b>Password</b>
@@ -195,6 +189,7 @@ class User extends Component {
                                     <FormControl type="password" id="password" name="password" onChange={this.handleChange} value={this.state.userObj.password} required></FormControl>
                                 </Col>
                             </FormGroup>
+
                             <FormGroup>
                                 <Col sm={4} xs={12}>
                                     <b>Confirm Password</b>
@@ -203,10 +198,20 @@ class User extends Component {
                                     <FormControl type="password" id="confirmPassword" name="confirmPassword" onChange={this.handleChange} value={this.state.userObj.confirmPassword} required></FormControl>
                                 </Col>
                             </FormGroup>
+
+                            <FormGroup >
+                                <Col sm={4} xs={12}>
+                                </Col>
+                                <Col sm={8} xs={12}>
+                                    <div className="error"><b>{this.state.userObj.error}</b></div>
+                                </Col>
+                            </FormGroup>
+
                             <div align="center" className="mt-30">
                                 <Button className="m-rl-5 button" onClick={this.onReset}>RESET</Button>
                                 <Button type="submit" className="m-rl-5 button" id="submit">SUBMIT</Button>
                             </div>
+
                         </Form>
                     </Well>
                 </Grid>

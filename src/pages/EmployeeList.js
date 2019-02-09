@@ -38,7 +38,7 @@ class EmployeeList extends React.Component {
     }
 
     render() {
-        let hasEmployees = (this.props.employeeList.length !== 0 ) ? true : false;
+        let hasEmployees = (this.props.employeeList.length !== 0) ? true : false;
         return (
             <div>
                 <SideNavBar />
@@ -111,7 +111,7 @@ class EmployeeList extends React.Component {
                                 </Table>
                             </Col>
                         </Row>
-                        {hasEmployees ? "" :<h4 align="center" style={{color : 'grey'}}> No Employees are available to display. Please add new employee</h4>}           
+                        {hasEmployees ? "" : <h4 align="center" style={{ color: 'grey' }}> No Employees are available to display. Please add new employee</h4>}
                     </div>
 
                     <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
