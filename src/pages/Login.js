@@ -94,7 +94,6 @@ class Login extends Component {
             this.setState({ show: false, isLoggedIn: false });
             document.getElementById("user").innerHTML = "User Name : " + this.state.attendanceObj.userName;
             document.getElementById("timein").innerHTML = "Time In : " + Moment(this.state.attendanceObj.timeInDate).format('h:mm:ss a');
-
           }
           this.props.addAttendance(this.state.attendanceObj);
         }
@@ -157,18 +156,18 @@ class Login extends Component {
             <Modal.Body>
               <Form horizontal>
                 <FormGroup className="mt-10" >
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                     <b>Username</b>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12}>
+                  <Col lg={10} md={10} sm={10} xs={9}>
                     <FormControl type="text" id="userName" name="userName" value={this.state.attendanceObj.userName} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" required />
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                     <b>Password</b>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12}>
+                  <Col lg={10} md={10} sm={10} xs={9}>
                     <FormControl type="password" id="password" name="password" value={this.state.attendanceObj.password} onChange={this.handleChange} onKeyPress={this.onLoginKeyPress} autoComplete="off" required />
                   </Col>
                 </FormGroup>
@@ -196,18 +195,18 @@ class Login extends Component {
             <Modal.Body>
               <Form horizontal>
                 <FormGroup className="mt-10" >
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                     <b>Username</b>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12}>
+                  <Col lg={10} md={10} sm={10} xs={9}>
                     <FormControl type="text" id="userName" name="userName" value={this.state.attendanceObj.userName} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" required />
                   </Col>
                 </FormGroup>
                 <FormGroup className="mt-10" >
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                     <b>Password</b>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12}>
+                  <Col lg={10} md={10} sm={10} xs={9}>
                     <FormControl type="password" id="password" name="password" value={this.state.attendanceObj.password} onChange={this.handleChange} onKeyPress={this.onSiteLoginKeyPress} autoComplete="off" required />
                   </Col>
                 </FormGroup>

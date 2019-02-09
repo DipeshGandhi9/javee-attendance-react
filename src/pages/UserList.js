@@ -35,6 +35,7 @@ class UserList extends React.Component {
     }
 
     render() {
+        let hasUsers = (this.props.userList.length !== 0 ) ? true : false;
         return (
             <div>
                 <SideNavBar />
@@ -83,7 +84,6 @@ class UserList extends React.Component {
                                     </thead>
                                     <tbody>
                                         {this.props.userList.map((user, id) => {
-                                            console.log(this.props.userList);
                                             return (
                                                 <tr key={user.id}>
                                                     <td>{user.id}</td>
@@ -100,6 +100,7 @@ class UserList extends React.Component {
                                 </Table>
                             </Col>
                         </Row>
+                        {hasUsers ? "" :<h4 align="center" style={{color : 'grey'}}> No Users are available to display. Please add new user</h4>}
                     </div>
                     <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
                         <Modal.Header closeButton>
