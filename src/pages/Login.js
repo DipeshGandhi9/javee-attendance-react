@@ -172,9 +172,9 @@ class Login extends Component {
                   </Col>
                 </FormGroup>
                 <FormGroup className="m-0">
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12} className="p-0">
+                  <Col lg={10} md={10} sm={10} xs={9} className="p-0">
                     <div className="error"><b>{this.state.attendanceObj.errorMessage}</b></div>
                   </Col>
                 </FormGroup>
@@ -213,13 +213,13 @@ class Login extends Component {
                 </FormGroup>
 
                 <FormGroup className="m-0">
-                  <Col lg={2} md={2} sm={2} xs={12}>
+                  <Col lg={2} md={2} sm={2} xs={3}>
                   </Col>
-                  <Col lg={10} md={10} sm={10} xs={12} className="p-0">
+                  <Col lg={10} md={10} sm={10} xs={9} className="p-0">
                     <div className="error"><b>{this.state.attendanceObj.errorMessage}</b></div>
                   </Col>
                 </FormGroup>
-                
+
               </Form>
             </Modal.Body>
 
