@@ -16,7 +16,7 @@ class Calendar extends React.Component {
     super(props);
 
     let yearList = [];
-    var start = 2018;
+    var start = new Date().getFullYear() - 1;
     var end = new Date().getFullYear();
     for (var year = end; year >= start; year--) {
       yearList.push(year);
@@ -67,11 +67,16 @@ class Calendar extends React.Component {
       }
       else {
         col.className = "column";
-        if ((startDate.getDate() >= new Date().getDate())) {
-          cardDate.className = "card-text remainingday-card";
-        } else {
+        if ((this.state.calenderObj.year < new Date().getFullYear()) || (this.state.calenderObj.month - 1 < new Date().getMonth())) {
           cardDate.className = "card-text absentday-card";
         }
+        else
+          if (((this.state.calenderObj.month - 1 > new Date().getMonth()) && (this.state.calenderObj.year >= new Date().getFullYear())) || (startDate.getDate() >= new Date().getDate())) {
+            cardDate.className = "card-text remainingday-card";
+          }
+          else {
+            cardDate.className = "card-text absentday-card";
+          }
       }
       cardDate.innerHTML = startDate.getDate() + "  " + weekDay;
 
@@ -142,7 +147,6 @@ class Calendar extends React.Component {
 
         let cardDate = document.createElement("div");
         let cardInfo = document.createElement("div");
-        let newDate = new Date();
         let d;
 
         if (weekDay === "Sun") {
@@ -174,15 +178,16 @@ class Calendar extends React.Component {
             }
             else {
               col.className = "column";
-              if (this.state.calenderObj.year < newDate.getFullYear()) {
+              if ((this.state.calenderObj.year < new Date().getFullYear()) || (this.state.calenderObj.month - 1 < new Date().getMonth())) {
                 cardDate.className = "card-text absentday-card";
               }
-              else if (((this.state.calenderObj.month - 1 > newDate.getMonth()) && (this.state.calenderObj.year >= newDate.getFullYear())) || (startDate.getDate() >= newDate.getDate())) {
-                cardDate.className = "card-text remainingday-card";
-              }
-              else {
-                cardDate.className = "card-text absentday-card";
-              }
+              else
+                if (((this.state.calenderObj.month - 1 > new Date().getMonth()) && (this.state.calenderObj.year >= new Date().getFullYear())) || (startDate.getDate() >= new Date().getDate())) {
+                  cardDate.className = "card-text remainingday-card";
+                }
+                else {
+                  cardDate.className = "card-text absentday-card";
+                }
             }
           }
         }

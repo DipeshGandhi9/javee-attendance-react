@@ -64,6 +64,7 @@ class Login extends Component {
       attendanceObj["errorMessage"] = "User Name & Password must be Required!";
       this.setState({ attendanceObj });
     }
+    this.onResetClick();
   }
 
   onResetClick = (e) => {
@@ -107,7 +108,7 @@ class Login extends Component {
       attendanceObj["errorMessage"] = "User Name & Password must be Required!";
       this.setState({ attendanceObj });
     }
-
+    this.onResetClick();
   }
 
   handleChange = (e) => {
@@ -134,10 +135,26 @@ class Login extends Component {
           <Row className="mt-10">
             <ButtonToolbar>
               <Col xs={6}>
-                <Button className="pull-right button" bsSize="large" onClick={() => this.setState({ showSiteLogin: true, 'username': "", 'password': "" })}  >Site Login</Button>
+                <Button className="pull-right button" bsSize="large" 
+                onClick={() => 
+                  {this.setState({ show: true})
+                  const {attendanceObj} = this.state;
+                  attendanceObj["userName"] = "";
+                  attendanceObj["password"] = "";
+                  this.setState({attendanceObj});
+                }}
+                  >Site Login</Button>
               </Col>
               <Col xs={6} className="seperator">
-                <Button bsSize="large" id="login" className="button " onClick={() => this.setState({ show: true, 'username': "", 'password': "" })} >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
+                <Button bsSize="large" id="login" className="button " 
+                onClick={() => 
+                  {this.setState({ show: true})
+                  const {attendanceObj} = this.state;
+                  attendanceObj["userName"] = "";
+                  attendanceObj["password"] = "";
+                  this.setState({attendanceObj});
+                }}
+                 >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
                 <div>
                   {this.state.isLoggedIn ?
                     '' :
