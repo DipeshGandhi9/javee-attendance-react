@@ -202,6 +202,7 @@ class Login extends Component {
                     <FormControl type="text" id="userName" name="userName" value={this.state.attendanceObj.userName} onChange={this.handleChange} autoComplete="off" autoFocus="autofocus" required />
                   </Col>
                 </FormGroup>
+
                 <FormGroup className="mt-10" >
                   <Col lg={2} md={2} sm={2} xs={3}>
                     <b>Password</b>
@@ -210,6 +211,7 @@ class Login extends Component {
                     <FormControl type="password" id="password" name="password" value={this.state.attendanceObj.password} onChange={this.handleChange} onKeyPress={this.onSiteLoginKeyPress} autoComplete="off" required />
                   </Col>
                 </FormGroup>
+
                 <FormGroup className="m-0">
                   <Col lg={2} md={2} sm={2} xs={12}>
                   </Col>
@@ -217,6 +219,7 @@ class Login extends Component {
                     <div className="error"><b>{this.state.attendanceObj.errorMessage}</b></div>
                   </Col>
                 </FormGroup>
+                
               </Form>
             </Modal.Body>
 

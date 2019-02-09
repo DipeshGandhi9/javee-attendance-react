@@ -49,9 +49,7 @@ class BreakTimeModal extends Component {
                             <div>{this.state.time.timeIn ? "Break Time In : " + Moment(this.state.time.timeIn).format("DD/MM/YYYY hh:mm:ss a") : ""}</div>
                             <div>{this.state.time.timeOut ? "Break Time Out : " + Moment(this.state.time.timeOut).format("DD/MM/YYYY hh:mm:ss a") : ""}</div>
                         </Row>
-
                     </Modal.Body>
-
                 </Modal>
             </div>
         );

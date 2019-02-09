@@ -11,7 +11,6 @@ import SideNavBar from '../components/SideNavBar.js';
 import { loadAttendance } from '../actions/attendanceActions';
 import { loadEmployeeInfo } from '../actions/employeeActions'
 
-
 class Attendance extends React.Component {
   constructor(props) {
     super(props);
@@ -99,7 +98,6 @@ class Attendance extends React.Component {
                 </thead>
                 <tbody>
                   {this.props.attendances.map((user) => {
-
                     return (
                       <tr key={user.id}>
                         <td>{Moment(user.date).format('DD-MM-YYYY')}</td>
