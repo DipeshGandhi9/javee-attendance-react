@@ -9,7 +9,6 @@ export const loadUserInfo = () => dispach => {
   fetch(API_URL + 'api/users/', { method: 'GET', headers: { "Authorization": token } })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispach({
         type: FETCH_USERS,
         payload: json

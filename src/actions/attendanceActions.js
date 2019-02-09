@@ -9,7 +9,6 @@ export const loadAttendance = () => dispach => {
   fetch(API_URL + 'api/attendance/', { method: 'GET', headers: { "Authorization": token } })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispach({
         type: GET_ALL_ATTENDANCE,
         payload: json
