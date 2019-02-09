@@ -3,7 +3,6 @@ import Cookies from 'universal-cookie';
 import { API_URL, FETCH_USERS, FETCH_USER, REMOVE_FETCH_USER, UPDATE_FETCH_USER } from '../store/constants.js';
 
 const cookies = new Cookies();
-
 const token = "Bearer " + cookies.get('token');
 
 export const loadUserInfo = () => dispach => {
@@ -31,7 +30,6 @@ export const addUserInfo = (user, cb) => dispach => {
   })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispach({
         type: FETCH_USER,
         payload: json

@@ -3,7 +3,6 @@ import Cookies from 'universal-cookie';
 import { API_URL, GET_ALL_ATTENDANCE, ADD_ATTENDANCE, UPDATE_ATTENDANCE } from '../store/constants.js';
 
 const cookies = new Cookies();
-
 const token = "Bearer " + cookies.get('token');
 
 export const loadAttendance = () => dispach => {
