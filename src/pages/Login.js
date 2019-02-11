@@ -64,7 +64,6 @@ class Login extends Component {
       attendanceObj["errorMessage"] = "User Name & Password must be Required!";
       this.setState({ attendanceObj });
     }
-    this.onResetClick();
   }
 
   onResetClick = (e) => {
@@ -108,7 +107,6 @@ class Login extends Component {
       attendanceObj["errorMessage"] = "User Name & Password must be Required!";
       this.setState({ attendanceObj });
     }
-    this.onResetClick();
   }
 
   handleChange = (e) => {
@@ -137,10 +135,11 @@ class Login extends Component {
               <Col xs={6}>
                 <Button className="pull-right button" bsSize="large" 
                 onClick={() => 
-                  {this.setState({ show: true})
+                  {this.setState({ showSiteLogin: true})
                   const {attendanceObj} = this.state;
                   attendanceObj["userName"] = "";
                   attendanceObj["password"] = "";
+                  attendanceObj["errorMessage"] = "";
                   this.setState({attendanceObj});
                 }}
                   >Site Login</Button>
@@ -152,6 +151,7 @@ class Login extends Component {
                   const {attendanceObj} = this.state;
                   attendanceObj["userName"] = "";
                   attendanceObj["password"] = "";
+                  attendanceObj["errorMessage"] = "";
                   this.setState({attendanceObj});
                 }}
                  >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
