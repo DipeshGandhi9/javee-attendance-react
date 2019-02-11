@@ -133,28 +133,28 @@ class Login extends Component {
           <Row className="mt-10">
             <ButtonToolbar>
               <Col xs={6}>
-                <Button className="pull-right button" bsSize="large" 
-                onClick={() => 
-                  {this.setState({ showSiteLogin: true})
-                  const {attendanceObj} = this.state;
-                  attendanceObj["userName"] = "";
-                  attendanceObj["password"] = "";
-                  attendanceObj["errorMessage"] = "";
-                  this.setState({attendanceObj});
-                }}
-                  >Site Login</Button>
+                <Button className="pull-right button" bsSize="large"
+                  onClick={() => {
+                    this.setState({ showSiteLogin: true })
+                    const { attendanceObj } = this.state;
+                    attendanceObj["userName"] = "";
+                    attendanceObj["password"] = "";
+                    attendanceObj["errorMessage"] = "";
+                    this.setState({ attendanceObj });
+                  }}
+                >Site Login</Button>
               </Col>
               <Col xs={6} className="seperator">
-                <Button bsSize="large" id="login" className="button " 
-                onClick={() => 
-                  {this.setState({ show: true})
-                  const {attendanceObj} = this.state;
-                  attendanceObj["userName"] = "";
-                  attendanceObj["password"] = "";
-                  attendanceObj["errorMessage"] = "";
-                  this.setState({attendanceObj});
-                }}
-                 >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
+                <Button bsSize="large" id="login" className="button "
+                  onClick={() => {
+                    this.setState({ show: true })
+                    const { attendanceObj } = this.state;
+                    attendanceObj["userName"] = "";
+                    attendanceObj["password"] = "";
+                    attendanceObj["errorMessage"] = "";
+                    this.setState({ attendanceObj });
+                  }}
+                >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
                 <div>
                   {this.state.isLoggedIn ?
                     '' :
