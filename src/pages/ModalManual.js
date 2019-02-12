@@ -72,7 +72,7 @@ class ModalManual extends Component {
                 </Form>
               </Col>
             </Row>
-            
+
             <Row>
               <Col>
                 <Form>

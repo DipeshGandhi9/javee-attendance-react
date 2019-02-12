@@ -19,21 +19,21 @@ export default (url = '/') => {
   // Create a history depending on the environment
   const history = isServer
     ? createMemoryHistory({
-        initialEntries: [url]
-      })
+      initialEntries: [url]
+    })
     : createBrowserHistory();
- 
+
   const enhancers = [];
- 
+
   // Dev tools are helpful
   if (process.env.NODE_ENV === 'development' && !isServer) {
     const devToolsExtension = window.devToolsExtension;
- 
+
     if (typeof devToolsExtension === 'function') {
       enhancers.push(devToolsExtension());
     }
   }
- 
+
   const middleware = [thunk, routerMiddleware(history)];
 
   if (process.env.NODE_ENV === 'development' && !isServer) {
@@ -44,22 +44,22 @@ export default (url = '/') => {
     applyMiddleware(...middleware),
     ...enhancers
   );
- 
+
   // Do we have preloaded state available? Great, save it.
   const initialState = !isServer ? window.__REDUX_STATE__ : {};
- 
+
   // Delete it once we have it stored in a variable
   if (!isServer) {
     delete window.__REDUX_STATE__;
   }
- 
+
   // Create the store
   const store = createStore(
     connectRouter(history)(rootReducer),
     initialState,
     composedEnhancers
   );
- 
+
   if (process.env.NODE_ENV !== 'production') {
     if (module.hot) {
       module.hot.accept('./reducer', () => {
@@ -67,9 +67,9 @@ export default (url = '/') => {
       });
     }
   }
- 
+
   return {
     store,
     history
   };
- };
+};

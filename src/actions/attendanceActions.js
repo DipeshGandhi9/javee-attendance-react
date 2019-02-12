@@ -1,6 +1,6 @@
 import Cookies from 'universal-cookie';
 
-import { API_URL, GET_ALL_ATTENDANCE, ADD_ATTENDANCE, UPDATE_ATTENDANCE } from '../store/constants.js';
+import { API_URL, GET_ALL_ATTENDANCE, ADD_TIMEIN_ATTENDANCE, ADD_TIMEOUT_ATTENDANCE, UPDATE_ATTENDANCE } from '../store/constants.js';
 
 const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
@@ -22,22 +22,42 @@ export const loadAttendance = () => dispach => {
     });
 }
 
-export const addAttendance = (attendance) => dispach => {
-  fetch(API_URL + 'api/attendance/', {
+export const addTimeInAttendance = (attendance) => dispach => {
+  //console.log(cookies.get("employeeId"));
+  fetch(API_URL + 'api/attendance/timein/' + attendance.employee.id, {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
     body: JSON.stringify(attendance)
   })
     .then(response => response.json())
     .then(json => {
-      console.log(json);
       dispach({
-        type: ADD_ATTENDANCE,
-        payload: json
+        type: ADD_TIMEIN_ATTENDANCE,
+        payload: attendance
       });
     })
     .catch(eror => {
       dispach({
-        type: ADD_ATTENDANCE,
+        type: ADD_TIMEIN_ATTENDANCE,
+        payload: {}
+      });
+    });
+}
+
+export const addTimeOutAttendance = (attendance) => dispach => {
+  fetch(API_URL + 'api/attendance/timeout/' + attendance.employee.id, {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
+    body: JSON.stringify(attendance)
+  })
+    .then(response => response.json())
+    .then(json => {
+      dispach({
+        type: ADD_TIMEOUT_ATTENDANCE,
+        payload: attendance
+      });
+    })
+    .catch(eror => {
+      dispach({
+        type: ADD_TIMEOUT_ATTENDANCE,
         payload: {}
       });
     });

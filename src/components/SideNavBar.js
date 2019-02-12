@@ -17,11 +17,11 @@ class SideNavBar extends Component {
     };
   }
 
-  CloseSideNav=()=> {
+  CloseSideNav = () => {
     this.setState({ showNav: false })
   }
 
-  removeUserName = () =>{
+  removeUserName = () => {
     cookies.remove('userName');
   }
 
@@ -51,7 +51,7 @@ class SideNavBar extends Component {
                 </Link>
               </Navbar.Text>
               <Navbar.Text pullRight className="pl-10 text">
-              <Glyphicon glyph="user" style={{ right: "5px", top: "2px" }}></Glyphicon>
+                <Glyphicon glyph="user" style={{ right: "5px", top: "2px" }}></Glyphicon>
                 <span className="userName">{userName}</span>
               </Navbar.Text>
             </Col>
@@ -66,9 +66,9 @@ class SideNavBar extends Component {
           items={
             [<Link to="dashboard"><div onClick={this.CloseSideNav}><Glyphicon glyph="th-large" className="mr-15"></Glyphicon>DashBoard</div></Link>,
             <Link to="attendance"><div onClick={this.CloseSideNav}><Glyphicon glyph="align-center" className="mr-15"></Glyphicon>Attendance</div></Link>,
-             <Link to="employeelist"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>Employee</div></Link>,
-             <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="lock" className="mr-15"></Glyphicon>User</div></Link>,
-             <Link to="calendar"><div onClick={this.CloseSideNav}><Glyphicon glyph="calendar" className="mr-15"></Glyphicon>Calendar</div></Link>
+            <Link to="employeelist"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>Employee</div></Link>,
+            <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="lock" className="mr-15"></Glyphicon>User</div></Link>,
+            <Link to="calendar"><div onClick={this.CloseSideNav}><Glyphicon glyph="calendar" className="mr-15"></Glyphicon>Calendar</div></Link>
             ]
           }
           titleStyle={{ backgroundColor: '#fff', textAlign: "center" }}

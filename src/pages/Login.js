@@ -4,14 +4,18 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import Moment from 'moment';
+import Cookies from 'universal-cookie';
 
-import "react-toastify/dist/ReactToastify.css";
 import './Pages.css';
 
-import { authUser } from '../actions/userActions';
-import { addAttendance, updateAttendance } from '../actions/attendanceActions';
+import { authSiteLoginUser, authLoginUser } from '../actions/userActions';
+import { addTimeInAttendance, addTimeOutAttendance, updateAttendance } from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
 import BreakTimeModal from './BreakTimeModal';
+
+const cookies = new Cookies();
+// const employeeId = cookies.get("employeeId");
+// console.log("employeeId "+employeeId);
 
 class Login extends Component {
   constructor(props) {
@@ -49,7 +53,7 @@ class Login extends Component {
   onSiteLoginClick = () => {
     const { attendanceObj } = this.state;
     if (this.state.attendanceObj.userName !== "" && this.state.attendanceObj.userName !== "") {
-      this.props.authUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
+      this.props.authSiteLoginUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
           this.setState({ showSiteLogin: false });
           window.open("/dashboard", "_SELF");
@@ -78,24 +82,27 @@ class Login extends Component {
   onLoginClick = () => {
     const { attendanceObj } = this.state;
     if (this.state.attendanceObj.userName !== "" && this.state.attendanceObj.userName !== "") {
-      this.props.authUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
+      this.props.authLoginUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
+          //this.props.loggedInUser();
           if (this.state.isLoggedIn === false) {
             attendanceObj["timeOutDate"] = new Date();
             this.setState({ attendanceObj });
             this.setState({ show: false, isLoggedIn: true });
             document.getElementById("timeout").innerHTML = "Time Out : " + Moment(this.state.attendanceObj.timeOutDate).format('h:mm:ss a');
+            this.props.addTimeOutAttendance(this.state.attendanceObj);
           }
           else {
-            attendanceObj["employee"] = { "id": "1", "firstName": "Unnati", "lastName": "Modi" };
+            attendanceObj["employee"] = { "id": cookies.get("employeeId") };
             attendanceObj["date"] = new Date();
             attendanceObj["timeInDate"] = new Date();
             this.setState({ attendanceObj });
             this.setState({ show: false, isLoggedIn: false });
             document.getElementById("user").innerHTML = "User Name : " + this.state.attendanceObj.userName;
             document.getElementById("timein").innerHTML = "Time In : " + Moment(this.state.attendanceObj.timeInDate).format('h:mm:ss a');
+            this.props.addTimeInAttendance(this.state.attendanceObj);
           }
-          this.props.addAttendance(this.state.attendanceObj);
+
         }
         else {
           attendanceObj["errorMessage"] = "Invalid User Name or Password!";
@@ -270,6 +277,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-    authUser, addAttendance, updateAttendance
+    authSiteLoginUser, authLoginUser, addTimeInAttendance, addTimeOutAttendance, updateAttendance
   }, dispatch)
 )(Login));

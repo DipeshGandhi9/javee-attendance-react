@@ -9,8 +9,7 @@ import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadUserInfo, addUserInfo, updateUserInfo } from '../actions/userActions';
-import { loadEmployeeInfo } from '../actions/employeeActions'
+import { loadUserInfo, addUserInfo, updateUserInfo, loadNewUserInfo } from '../actions/userActions';
 
 const cookies = new Cookies();
 
@@ -18,16 +17,19 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            "Role": ["EMPLOYEE", "ADMIN", "HR"],
             userObj: {
                 'userName': "",
                 'password': "",
-                'confirmPassword': ""
+                'confirmPassword': "",
+                "Role": "EMPLOYEE"
             }
         }
     }
 
     componentDidMount() {
-        this.props.loadEmployeeInfo();
+        this.props.loadNewUserInfo();
+        this.props.loadUserInfo();
         var queryParameters = queryString.parse(this.props.location.search);
         if (queryParameters['id']) {
             this.getUserObj(queryParameters['id']);
@@ -41,6 +43,7 @@ class User extends Component {
                 const { userObj } = this.state;
                 userObj["userName"] = user.userName;
                 userObj["id"] = user.id;
+                userObj["Role"] = user.role;
                 userObj["employee"] =
                     {
                         "id": user.employee.id,
@@ -69,24 +72,33 @@ class User extends Component {
             this.setState({ userObj });
         }
         else {
-            userObj["employee"] = { "id": id, "firstName": selectedEmployee[0].firstName, "lastName": selectedEmployee[0].lastName };
+            userObj["employee"] = {
+                "id": id,
+                "firstName": selectedEmployee[0].firstName,
+                "lastName": selectedEmployee[0].lastName
+            };
             this.setState({ userObj });
         }
     }
 
+    onRoleChange = (e) => {
+        const { userObj } = this.state;
+        userObj["Role"] = e.target.value;
+        this.setState({ userObj });
+    }
+
     onReset = () => {
-        var div = document.getElementById("id");
-        div.innerHTML = "";
-        div.removeAttribute("class");
         document.getElementById("select").selectedIndex = 0;
+        document.getElementById("employee").selectedIndex = 0;
         this.setState((state) => {
             state.userObj = {
                 'userName': "",
                 'password': "",
-                'confirmPassword': ""
+                'confirmPassword': "",
+                'Role': "EMPLOYEE"
             }
             return state;
-        })
+        });
     }
 
     onSubmit = (e) => {
@@ -124,10 +136,12 @@ class User extends Component {
 
     render() {
         let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+
         let selectedEmployee = [];
         for (var keyValue in this.state.userObj.employee) {
             selectedEmployee.push(this.state.userObj.employee[keyValue]);
         }
+
         return (
             <div>
                 <SideNavBar />
@@ -150,7 +164,7 @@ class User extends Component {
                                     <b>Employee Name</b>
                                 </Col>
                                 <Col sm={8} xs={12}>
-                                    <FormControl componentClass="select" id="select" onChange={this.onChangeHandeler} required >
+                                    <FormControl componentClass="select" id="employee" onChange={this.onChangeHandeler} required >
                                         <option value="" >{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
                                         {this.props.employeeList.map((employee, id) =>
                                             (selectedEmployee[0] === employee.id) ?
@@ -169,7 +183,7 @@ class User extends Component {
                             <Col sm={4} xs={12}></Col>
                             <Col sm={8} xs={12}>
                                 {this.state.userObj.employee ?
-                                    <div className="mb-10">Id : {this.state.userObj.employee.id}  Name : {this.state.userObj.employee.firstName} {this.state.userObj.employee.lastName}  Department : </div> : ""}
+                                    <div className="mb-10">Id : {this.state.userObj.employee.id} &nbsp;&nbsp;Name : {this.state.userObj.employee.firstName} {this.state.userObj.employee.lastName} &nbsp;&nbsp;Department : </div> : ""}
                             </Col>
 
                             <FormGroup>
@@ -199,6 +213,21 @@ class User extends Component {
                                 </Col>
                             </FormGroup>
 
+                            <FormGroup>
+                                <Col sm={4} xs={12}>
+                                    <b>Role</b>
+                                </Col>
+                                <Col sm={8} xs={12}>
+                                    <FormControl componentClass="select" id="select" onChange={this.onRoleChange} required >
+                                        {this.state.Role.map((role, id) =>
+                                            <option key={id} value={role} name={role}>
+                                                {role}
+                                            </option>
+                                        )}
+                                    </FormControl>
+                                </Col>
+                            </FormGroup>
+
                             <FormGroup >
                                 <Col sm={4} xs={12}>
                                 </Col>
@@ -221,12 +250,13 @@ class User extends Component {
 }
 
 const mapStateToProps = state => ({
-    employeeList: state.app.employees
+    userList: state.app.userList,
+    employeeList: state.app.newUsers
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadUserInfo, loadEmployeeInfo, addUserInfo, updateUserInfo
+        loadUserInfo, loadNewUserInfo, addUserInfo, updateUserInfo
     }, dispatch)
 )(User));

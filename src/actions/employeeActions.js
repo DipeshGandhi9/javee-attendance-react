@@ -4,6 +4,7 @@ import { API_URL, FETCH_EMPLOYEE, FETCH_EMPLOYEES, REMOVE_FETCH_EMPLOYEE, UPDATE
 
 const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
+console.log(token);
 
 export const loadEmployeeInfo = () => dispach => {
   fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
