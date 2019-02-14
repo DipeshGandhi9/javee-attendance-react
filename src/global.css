@@ -1,70 +1,92 @@
 .m-0{
     margin: 0 !important;
 }
+
 .m-auto{
     margin-left: auto;
     margin-right: auto;
 }
+
 .mt-5{
     margin-top: 5px;
 }
+
 .mt-10{
     margin-top: 10px !important;
 }
+
 .mt-30{
     margin-top: 30px;
 }
+
 .mt-50{
     margin-top: 50px;
 }
+
 .mt-140{
     margin-top: 140px;
 }
+
 .mr-10{
     margin-right: 10px;
 }
+
 .mr-15{
     margin-right: 15px;
 }
+
 .mb-10{
     margin-bottom: 10px;
 }
+
 .ml-10{
     margin-left: 10px;
 }
+
 .m-rl-5{
     margin: 0 5px;
 }
+
 .p-0{
     padding: 0 !important;
 }
+
 .pd-15{
     padding: 15px !important;
 }
+
 .pr-10{
     padding-right: 10px;
 }
+
 .pl-10{
     padding-left: 10px;
 }
+
 .pl-20{
     padding-left: 20px;
 }
+
 .br-1{
     border: 1px solid !important;
 }
+
 .button{
     width: 120px;
 }
+
 .flex{
     display : flex;
 }
+
 .width-100{
     width:100%;
 }
+
 .h-150{
     height: 150px;
 }
+
 .h-300{
     height :300px;
 }

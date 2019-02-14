@@ -2,7 +2,6 @@ import * as types from './constants';
 
 const initialState = {
     userList: [],
-    newUsers: [],
     user: {},
     userTaleHeaders: {
         'id': "Id",
@@ -16,7 +15,7 @@ const initialState = {
     employee: {},
     employees: [],
     employeeTaleHeaders: {
-        'id': "Sr No.",
+        'id': 'Sr No.',
         'firstName': 'First Name',
         'lastName': 'Last Name',
         'address': 'Address',
@@ -26,14 +25,38 @@ const initialState = {
         'edit': 'Edit',
         'delete': 'Delete'
     },
-    attendance: {},
+    organization: {},
+    organizationList: [],
+    organizationHeaders: {
+        'id': 'Sr No.',
+        'organizationName': 'Organization Name',
+        'address': 'Address',
+        'contactPerson' : 'Contact Person',
+        'email': 'Person E-mail',
+        'totalMember': 'Number of Members',
+        'edit': 'Edit',
+        'delete': 'Delete'
+    },
+    attendance: "",
     attendances: [],
+    filterAttendance : [],
     attendancesHeaders: {
         'date': 'Date',
         'employeeName': 'Employee Name',
         'timeIn': 'Time In',
         'timeOut': 'Time Out'
+    },
+    totalEmployees: null,
+    presentEmployeesList: [],
+    presentEmployees: null,
+    leaveEmployees: null,
+    presentEmployeeHeader: {
+        'id': 'Sr No.',
+        'employeeName': 'Employee Name',
+        'timeIn': 'Time In',
+        'timeOut': 'Time Out'
     }
+
 }
 
 const reducer = (state = initialState, action) => {
@@ -78,11 +101,6 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 user: action.payload,
             };
-        case types.FETCH_NEW_USERS:
-            return {
-                ...state,
-                newUsers: action.payload,
-            };
         case types.REMOVE_FETCH_USER:
             return {
                 ...state,
@@ -107,6 +125,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 attendances: action.payload,
             };
+            case types.GET_FILTER_ATTENDANCE:
+            return {
+                ...state,
+                filterAttendance: action.payload,
+            };
         case types.ADD_TIMEOUT_ATTENDANCE:
             return {
                 ...state,
@@ -127,6 +150,29 @@ const reducer = (state = initialState, action) => {
                     return attendance;
                 })
             };
+
+        //--DashBoard--//
+        case types.TOTAL_EMPLOYEES:
+            return {
+                ...state,
+                totalEmployees: action.payload,
+            };
+        case types.PRESENT_EMPLOYEES_LIST:
+            return {
+                ...state,
+                presentEmployeesList: action.payload,
+            };
+        case types.PRESENT_EMPLOYEES:
+            return {
+                ...state,
+                presentEmployees: action.payload,
+            };
+        case types.LEAVE_EMPLOYEES:
+            return {
+                ...state,
+                leaveEmployees: action.payload,
+            };
+
 
         default:
             return state;

@@ -7,23 +7,30 @@ const token = "Bearer " + cookies.get('token');
 console.log(token);
 
 export const loadEmployeeInfo = () => dispach => {
-  fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
-    .then(response => response.json())
-    .then(json => {
-      dispach({
-        type: FETCH_EMPLOYEES,
-        payload: json
+  if (cookies.get("token") === undefined) {
+    window.open("/", "_SELF");
+  }
+  else {
+    
+    fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
+      .then(response => response.json())
+      .then(json => {
+        dispach({
+          type: FETCH_EMPLOYEES,
+          payload: json
+        });
+      })
+      .catch(eror => {
+        dispach({
+          type: FETCH_EMPLOYEES,
+          payload: []
+        });
       });
-    })
-    .catch(eror => {
-      dispach({
-        type: FETCH_EMPLOYEES,
-        payload: []
-      });
-    });
+  }
 }
 
 export const addEmployeeInfo = (employee, cb) => dispach => {
+
   fetch(API_URL + 'api/employee/', {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
     body: JSON.stringify(employee)
@@ -50,6 +57,7 @@ export const addEmployeeInfo = (employee, cb) => dispach => {
 }
 
 export const deleteEmployeeInfo = id => dispach => {
+
   fetch(API_URL + 'api/employee/' + id, { method: 'DELETE', headers: { "Authorization": token } })
     .then(response => response.json())
     .then(json => {
@@ -67,6 +75,7 @@ export const deleteEmployeeInfo = id => dispach => {
 }
 
 export const updateEmployeeInfo = (employee, cb) => dispach => {
+
   fetch(API_URL + 'api/employee/' + employee.id, {
     method: 'PUT', body: JSON.stringify(employee),
     headers: { 'Content-Type': 'application/json', "Authorization": token }, credentials: 'same-origin'

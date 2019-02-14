@@ -11,11 +11,9 @@ import './Pages.css';
 import { authSiteLoginUser, authLoginUser } from '../actions/userActions';
 import { addTimeInAttendance, addTimeOutAttendance, updateAttendance } from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
-import BreakTimeModal from './BreakTimeModal';
+//import BreakTimeModal from './BreakTimeModal';
 
 const cookies = new Cookies();
-// const employeeId = cookies.get("employeeId");
-// console.log("employeeId "+employeeId);
 
 class Login extends Component {
   constructor(props) {
@@ -84,7 +82,6 @@ class Login extends Component {
     if (this.state.attendanceObj.userName !== "" && this.state.attendanceObj.userName !== "") {
       this.props.authLoginUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
-          //this.props.loggedInUser();
           if (this.state.isLoggedIn === false) {
             attendanceObj["timeOutDate"] = new Date();
             this.setState({ attendanceObj });
@@ -162,11 +159,11 @@ class Login extends Component {
                     this.setState({ attendanceObj });
                   }}
                 >{this.state.isLoggedIn ? 'Login ' : 'Logout'}</Button>
-                <div>
+                {/* <div>
                   {this.state.isLoggedIn ?
                     '' :
                     <BreakTimeModal />}
-                </div>
+                </div> */}
               </Col>
             </ButtonToolbar>
 

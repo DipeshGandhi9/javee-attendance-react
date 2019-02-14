@@ -8,7 +8,7 @@ import Moment from 'moment';
 import './Pages.css';
 
 import SideNavBar from '../components/SideNavBar.js';
-import { loadAttendance } from '../actions/attendanceActions';
+import { loadFilterAttendance } from '../actions/attendanceActions';
 import { loadEmployeeInfo } from '../actions/employeeActions'
 
 class Attendance extends React.Component {
@@ -16,6 +16,13 @@ class Attendance extends React.Component {
     super(props);
 
     this.state = {
+      attendanceObj: {
+        "id": undefined,
+        "month": new Date().getMonth() + 1,
+        "year": new Date().getFullYear(),
+        "startDate": Moment(new Date(new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-01")).format('YYYY-MM-DD hh:mm:ss'),
+        "endDate": Moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+      },
       'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'year': ['2019', '2018'],
       currentMonth: "",
@@ -25,18 +32,53 @@ class Attendance extends React.Component {
 
   componentDidMount = () => {
     this.props.loadEmployeeInfo();
-    this.props.loadAttendance();
+    this.props.loadFilterAttendance(this.state.attendanceObj);
     this.setState({
       currentMonth: Moment(new Date()).format('MMMM'),
       currentYear: Moment(new Date()).format('YYYY')
     });
   }
 
+  onEmployeeChangeHandler = (e) => {
+    const { attendanceObj } = this.state;
+    if (e.target.value === "") {
+      attendanceObj["id"] = undefined;
+    }
+    else {
+      attendanceObj["id"] = e.target.value;
+    }
+    this.setState({ attendanceObj });
+  }
+
+  onMonthChangeHandler = (e) => {
+    const { attendanceObj } = this.state;
+    attendanceObj["month"] = parseInt(e.target.value, 10) + 1;
+    this.setState({ attendanceObj });
+  }
+
+  onYearChangeHandler = (e) => {
+    const { attendanceObj } = this.state;
+    attendanceObj["year"] = parseInt(e.target.value, 10);
+    this.setState({ attendanceObj });
+  }
+
+  onSearch = () => {
+    const { attendanceObj } = this.state;
+    attendanceObj["startDate"] = Moment(new Date(attendanceObj.year + "-" + attendanceObj.month + "-01")).format("YYYY-MM-DD hh:mm:ss");
+    if ((attendanceObj.month - 1 === new Date().getMonth()) && (attendanceObj.year === new Date().getFullYear())) {
+      attendanceObj["endDate"] = Moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
+    }
+    else {
+      attendanceObj["endDate"] = Moment(new Date(attendanceObj.year, attendanceObj.month, 0)).format("YYYY-MM-DD hh:mm:ss");
+    }
+    this.props.loadFilterAttendance(this.state.attendanceObj);
+  }
 
   render() {
-    let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
-    let hasAttendances = (this.props.attendances.length !== 0) ? true : false;
 
+    let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+    let hasAttendances = (this.props.filterAttendance.length !== 0) ? true : false;
+   
     return (
       <div>
         <SideNavBar />
@@ -46,32 +88,32 @@ class Attendance extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name='employeeName'>
+                  <FormControl componentClass="select" name='employeeName' onChange={this.onEmployeeChangeHandler}>
                     <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
-                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.firstName} >{employee.firstName}</option>)}
+                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
                   </FormControl>
                 </Form>
               </Col>
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
-                    {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={month} >{month}</option>)}
+                  <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
+                    {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={i} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
-                    {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={i} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
+                  <FormControl componentClass="select" name="year" onChange={this.onYearChangeHandler}>
+                    {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={year} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>
             </Row>
 
             <div>
-              <Button>
+              <Button onClick={this.onSearch}>
                 <Glyphicon glyph="search" />
               </Button>
             </div>
@@ -97,7 +139,7 @@ class Attendance extends React.Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.props.attendances.map((user) => {
+                  {this.props.filterAttendance.map((user) => {
                     return (
                       <tr key={user.id}>
                         <td>{Moment(user.date).format('DD-MM-YYYY')}</td>
@@ -121,13 +163,12 @@ class Attendance extends React.Component {
 const mapStateToProps = state => ({
   employeeList: state.app.employees,
   tableHeader: state.app.attendancesHeaders,
-  attendances: state.app.attendances
+  filterAttendance: state.app.filterAttendance,
 })
 
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-    loadAttendance, loadEmployeeInfo
+    loadEmployeeInfo, loadFilterAttendance
   }, dispatch)
 )(Attendance));
-

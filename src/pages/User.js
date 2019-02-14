@@ -9,7 +9,8 @@ import Cookies from 'universal-cookie';
 
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar';
-import { loadUserInfo, addUserInfo, updateUserInfo, loadNewUserInfo } from '../actions/userActions';
+import { loadUserInfo, addUserInfo, updateUserInfo } from '../actions/userActions';
+import { loadEmployeeInfo } from '../actions/employeeActions';
 
 const cookies = new Cookies();
 
@@ -28,7 +29,7 @@ class User extends Component {
     }
 
     componentDidMount() {
-        this.props.loadNewUserInfo();
+        this.props.loadEmployeeInfo();
         this.props.loadUserInfo();
         var queryParameters = queryString.parse(this.props.location.search);
         if (queryParameters['id']) {
@@ -37,6 +38,7 @@ class User extends Component {
     }
 
     getUserObj = (id) => {
+        
         fetch(API_URL + 'api/user/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(user => {
@@ -251,12 +253,12 @@ class User extends Component {
 
 const mapStateToProps = state => ({
     userList: state.app.userList,
-    employeeList: state.app.newUsers
+    employeeList: state.app.employees
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadUserInfo, loadNewUserInfo, addUserInfo, updateUserInfo
+        loadUserInfo, loadEmployeeInfo, addUserInfo, updateUserInfo
     }, dispatch)
 )(User));

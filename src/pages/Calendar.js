@@ -116,10 +116,11 @@ class Calendar extends React.Component {
     document.getElementById("date-card-box").innerHTML = "";
     if (this.props.attendance.length === 0) {
       this.calenderCard();
-    } else {
-
+    }
+    else {
       let startDate = new Date(this.state.calenderObj.month + "-01-" + this.state.calenderObj.year);
       let currentMonth = startDate.getMonth() + 1;
+
       let timeIn = [];
       for (var j = 0; j < this.props.attendance.length; j++) {
         if (this.props.attendance[j].employee.id.toString() === this.state.calenderObj.id) {
@@ -206,8 +207,10 @@ class Calendar extends React.Component {
   }
 
   render() {
+
     const { yearList } = this.state;
     let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+    
     return (
       <div>
         <SideNavBar />

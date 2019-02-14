@@ -37,6 +37,7 @@ class Employee extends Component {
     }
 
     getEmployeeObj = (id) => {
+        
         fetch(API_URL + 'api/employee/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(employeeObj => {

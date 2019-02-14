@@ -23,6 +23,7 @@ class SideNavBar extends Component {
 
   removeUserName = () => {
     cookies.remove('userName');
+    cookies.remove("token");
   }
 
   render() {

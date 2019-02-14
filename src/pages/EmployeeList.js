@@ -18,8 +18,7 @@ class EmployeeList extends React.Component {
         super(props);
         this.state = {
             show: false,
-            id: "",
-            noEmployee: ""
+            id: ""
         }
     }
 
@@ -38,7 +37,9 @@ class EmployeeList extends React.Component {
     }
 
     render() {
+
         let hasEmployees = (this.props.employeeList.length !== 0) ? true : false;
+       
         return (
             <div>
                 <SideNavBar />
