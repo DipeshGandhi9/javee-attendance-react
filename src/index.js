@@ -17,6 +17,8 @@ import Employee from './pages/Employee';
 import EmployeeList from './pages/EmployeeList';
 import User from './pages/User';
 import UserList from './pages/UserList';
+import OrganizationList from './pages/OrganizationList';
+import Organization from './pages/Organization';
 
 const { store, history } = createStore();
 const Application = (
@@ -32,6 +34,8 @@ const Application = (
           <Route path="/dashboard" component={DashBoard}></Route>
           <Route path="/user" component={User}></Route>
           <Route path="/userlist" component={UserList}></Route>
+          <Route path="/organizationlist" component={OrganizationList}></Route>
+          <Route path="/organization" component={Organization}></Route>
         </Switch>
       </Frontload>
     </Router>

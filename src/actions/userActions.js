@@ -10,7 +10,7 @@ export const loadUserInfo = () => dispach => {
     window.open("/", "_SELF");
   }
   else {
-    
+
     fetch(API_URL + 'api/users/', { method: 'GET', headers: { "Authorization": token } })
       .then(response => response.json())
       .then(json => {

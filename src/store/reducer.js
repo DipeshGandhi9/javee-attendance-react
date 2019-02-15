@@ -31,7 +31,7 @@ const initialState = {
         'id': 'Sr No.',
         'organizationName': 'Organization Name',
         'address': 'Address',
-        'contactPerson' : 'Contact Person',
+        'contactPerson': 'Contact Person',
         'email': 'Person E-mail',
         'totalMember': 'Number of Members',
         'edit': 'Edit',
@@ -39,7 +39,7 @@ const initialState = {
     },
     attendance: "",
     attendances: [],
-    filterAttendance : [],
+    filterAttendance: [],
     attendancesHeaders: {
         'date': 'Date',
         'employeeName': 'Employee Name',
@@ -118,6 +118,33 @@ const reducer = (state = initialState, action) => {
                 })
             };
 
+        //--Organization--//
+        case types.FETCH_ORGANIZATIONS:
+            return {
+                ...state,
+                organizationList: action.payload,
+            };
+        case types.FETCH_ORGANIZATION:
+            return {
+                ...state,
+                organization: action.payload,
+            };
+        case types.REMOVE_FETCH_ORGANIZATION:
+            return {
+                ...state,
+                organizationList: state.organizationList.filter(organization =>
+                    organization.id !== action.payload)
+            };
+        case types.UPDATE_FETCH_ORGANIZATION:
+            return {
+                ...state,
+                organizationList: state.organizationList.map(organization => {
+                    if (organization.id === parseInt(action.payload.id, 10)) {
+                        organization = action.payload
+                    }
+                    return organization;
+                })
+            };
 
         //--Attendance--//  
         case types.GET_ALL_ATTENDANCE:
@@ -125,7 +152,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 attendances: action.payload,
             };
-            case types.GET_FILTER_ATTENDANCE:
+        case types.GET_FILTER_ATTENDANCE:
             return {
                 ...state,
                 filterAttendance: action.payload,

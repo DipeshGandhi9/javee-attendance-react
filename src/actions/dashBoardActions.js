@@ -7,7 +7,7 @@ const token = "Bearer " + cookies.get('token');
 
 export const getTotalEmployee = () => dispach => {
 
-    fetch(API_URL + 'api/totalemployees', { method: 'GET', headers: { "Authorization": token } })
+    fetch(API_URL + 'api/totalEmployees', { method: 'GET', headers: { "Authorization": token } })
         .then(response => response.json())
         .then(total => {
             dispach({
@@ -61,7 +61,7 @@ export const getPresentEmployee = (date) => dispach => {
 }
 
 export const getLeaveEmployee = (date) => dispach => {
-    
+
     fetch(API_URL + `api/dashboard/leaveCount/{date}?date=${date}`,
         { method: 'GET', headers: { "Authorization": token } })
         .then(response => response.json())

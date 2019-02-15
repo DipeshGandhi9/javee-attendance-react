@@ -1,6 +1,6 @@
 import Cookies from 'universal-cookie';
 
-import { API_URL, GET_ALL_ATTENDANCE, ADD_TIMEIN_ATTENDANCE, ADD_TIMEOUT_ATTENDANCE, UPDATE_ATTENDANCE ,GET_FILTER_ATTENDANCE } from '../store/constants.js';
+import { API_URL, GET_ALL_ATTENDANCE, ADD_TIMEIN_ATTENDANCE, ADD_TIMEOUT_ATTENDANCE, UPDATE_ATTENDANCE, GET_FILTER_ATTENDANCE } from '../store/constants.js';
 
 const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
@@ -10,7 +10,7 @@ export const loadAttendance = () => dispach => {
     window.open("/", "_SELF");
   }
   else {
-    
+
     fetch(API_URL + 'api/attendance/', { method: 'GET', headers: { "Authorization": token } })
       .then(response => response.json())
       .then(json => {
@@ -76,7 +76,7 @@ export const updateAttendance = (attendance, cb) => dispach => {
     method: 'PUT', body: JSON.stringify(attendance),
     headers: { 'Content-Type': 'application/json', "Authorization": token }, credentials: 'same-origin'
   })
-    .then(response => response)
+    .then(response => response.json())
     .then(json => {
       dispach({
         type: UPDATE_ATTENDANCE,
@@ -98,18 +98,16 @@ export const updateAttendance = (attendance, cb) => dispach => {
 }
 
 export const loadFilterAttendance = (attendance) => dispach => {
-  let url = "";
+
   if (cookies.get("token") === undefined) {
     window.open("/", "_SELF");
   }
   else {
-    if (attendance.id === undefined) {
-      url = API_URL + `api/attendance/{startDate}{endDate}{id}?startDate=${attendance.startDate}&endDate=${attendance.endDate}`;
-    }
-    else {
-      url = API_URL + `api/attendance/{startDate}{endDate}{id}?startDate=${attendance.startDate}&endDate=${attendance.endDate}&id=${attendance.id}`;
-    }
-    fetch(url, { method: 'GET', headers: { "Authorization": token } })
+
+    fetch(API_URL + "api/attendance/filter", {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
+      body: JSON.stringify(attendance)
+    })
       .then(response => response.json())
       .then(json => {
         dispach({

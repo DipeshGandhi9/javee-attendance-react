@@ -9,7 +9,7 @@ import Moment from 'moment';
 import "./Pages.css";
 
 import SideNavBar from '../components/SideNavBar.js';
-import { getTotalEmployee, getPresentEmployeeList, getPresentEmployee, getLeaveEmployee } from '../actions/dashBoardAction';
+import { getTotalEmployee, getPresentEmployeeList, getPresentEmployee, getLeaveEmployee } from '../actions/dashBoardActions';
 
 class DashBoard extends Component {
     constructor(props) {

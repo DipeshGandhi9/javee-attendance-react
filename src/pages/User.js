@@ -38,7 +38,7 @@ class User extends Component {
     }
 
     getUserObj = (id) => {
-        
+
         fetch(API_URL + 'api/user/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(user => {

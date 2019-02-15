@@ -7,13 +7,13 @@ import { withRouter } from 'react-router';
 
 import './Pages.css';
 import SideNavBar from '../components/SideNavBar.js';
-import { loadEmployeeInfo, deleteEmployeeInfo } from '../actions/employeeActions';
+import { loadOrganizationInfo, deleteOrganizationInfo } from '../actions/organizationActions';
 
 const tooltip = (
-    <Tooltip id="tooltip">Add Employee</Tooltip>
+    <Tooltip id="tooltip">Add Organization</Tooltip>
 );
 
-class EmployeeList extends React.Component {
+class OrganizationList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -27,19 +27,17 @@ class EmployeeList extends React.Component {
     }
 
     componentDidMount = () => {
-        this.props.loadEmployeeInfo();
+        this.props.loadOrganizationInfo();
     }
 
     deleteEmployee = (e, id) => {
         e.preventDefault();
-        this.props.deleteEmployeeInfo(id);
+        this.props.deleteOrganizationInfo(id);
         this.setState({ show: false });
     }
 
     render() {
-
-        let hasEmployees = (this.props.employeeList.length !== 0) ? true : false;
-
+        let hasEmployees = (this.props.organizationList.length !== 0) ? true : false;
         return (
             <div>
                 <SideNavBar />
@@ -47,7 +45,7 @@ class EmployeeList extends React.Component {
                     <Row>
                         <Col lg={12}>
                             <div>
-                                <Link to="employee">
+                                <Link to="organization">
                                     <OverlayTrigger placement="left" overlay={tooltip}>
                                         <Button className="pull-right">
                                             <Glyphicon glyph="plus"></Glyphicon>
@@ -67,22 +65,19 @@ class EmployeeList extends React.Component {
                                                 {this.props.tableHeader.id}
                                             </th>
                                             <th>
-                                                {this.props.tableHeader.firstName}
-                                            </th>
-                                            <th>
-                                                {this.props.tableHeader.lastName}
+                                                {this.props.tableHeader.organizationName}
                                             </th>
                                             <th>
                                                 {this.props.tableHeader.address}
                                             </th>
                                             <th>
-                                                {this.props.tableHeader.gender}
+                                                {this.props.tableHeader.contactPerson}
                                             </th>
                                             <th>
                                                 {this.props.tableHeader.email}
                                             </th>
                                             <th>
-                                                {this.props.tableHeader.contact}
+                                                {this.props.tableHeader.totalMember}
                                             </th>
                                             <th>
                                                 {this.props.tableHeader.edit}
@@ -93,18 +88,17 @@ class EmployeeList extends React.Component {
                                         </tr>
                                     </thead>
                                     <tbody >
-                                        {this.props.employeeList.map((employee, id) => {
+                                        {this.props.organizationList.map((organization, id) => {
                                             return (
-                                                <tr key={employee.id}>
-                                                    <td>{employee.id}</td>
-                                                    <td>{employee.firstName}</td>
-                                                    <td>{employee.lastName}</td>
-                                                    <td>{employee.address}</td>
-                                                    <td>{employee.gender}</td>
-                                                    <td>{employee.email}</td>
-                                                    <td>{employee.phoneNumber}</td>
-                                                    <td><Link to={{ pathname: "/employee", search: "id=" + employee.id }} className="icon-button"><Glyphicon glyph="edit" /></Link> </td>
-                                                    <td onClick={() => { this.setState({ show: true, id: employee.id }) }}><Glyphicon glyph="remove" /> </td>
+                                                <tr key={organization.id}>
+                                                    <td>{organization.id}</td>
+                                                    <td>{organization.organizationName}</td>
+                                                    <td>{organization.address}</td>
+                                                    <td>{organization.firstName} {organization.lastName}</td>
+                                                    <td>{organization.email}</td>
+                                                    <td></td>
+                                                    <td><Link to={{ pathname: "/organization", search: "id=" + organization.id }} className="icon-button"><Glyphicon glyph="edit" /></Link> </td>
+                                                    <td onClick={() => { this.setState({ show: true, id: organization.id }) }}><Glyphicon glyph="remove" /> </td>
                                                 </tr>
                                             );
                                         })}
@@ -112,7 +106,7 @@ class EmployeeList extends React.Component {
                                 </Table>
                             </Col>
                         </Row>
-                        {hasEmployees ? "" : <h4 align="center" style={{ color: 'grey' }}> No Employees are available to display. Please add new employee</h4>}
+                        {hasEmployees ? "" : <h4 align="center" style={{ color: 'grey' }}> No Organizations are available to display. Please add new employee</h4>}
                     </div>
 
                     <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
@@ -122,11 +116,11 @@ class EmployeeList extends React.Component {
                             </h3>
                         </Modal.Header>
                         <Modal.Body>
-                            Do you want to delete this employee?
+                            Do you want to delete this organization?
                             </Modal.Body>
                         <Modal.Footer>
                             <div>
-                                <Button className="delete-modal-button" onClick={(e) => this.deleteEmployee(e, this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={(e) => this.deleteOrganizationInfo(e, this.state.id)}>CONFIRM</Button>
                                 <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                         </Modal.Footer>
@@ -139,13 +133,13 @@ class EmployeeList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    employeeList: state.app.employees,
-    tableHeader: state.app.employeeTaleHeaders
+    organizationList: state.app.organizationList,
+    tableHeader: state.app.organizationHeaders
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        loadEmployeeInfo, deleteEmployeeInfo
+        loadOrganizationInfo, deleteOrganizationInfo
     }, dispatch),
-)(EmployeeList));
+)(OrganizationList));

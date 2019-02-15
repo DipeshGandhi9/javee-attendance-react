@@ -15,18 +15,27 @@ class Attendance extends React.Component {
   constructor(props) {
     super(props);
 
+    let yearList = [];
+    var start = new Date().getFullYear() - 1;
+    var end = new Date().getFullYear();
+    for (var year = end; year >= start; year--) {
+      yearList.push(year);
+    }
+
     this.state = {
       attendanceObj: {
-        "id": undefined,
-        "month": new Date().getMonth() + 1,
-        "year": new Date().getFullYear(),
         "startDate": Moment(new Date(new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-01")).format('YYYY-MM-DD hh:mm:ss'),
         "endDate": Moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
       },
-      'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-      'year': ['2019', '2018'],
-      currentMonth: "",
-      currentYear: ""
+      monthYearObject: {
+        "month": new Date().getMonth() + 1,
+        "year": new Date().getFullYear(),
+      },
+      'monthList': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+      yearList,
+      'currentMonth': "",
+      'currentYear': "",
+
     };
   }
 
@@ -34,42 +43,43 @@ class Attendance extends React.Component {
     this.props.loadEmployeeInfo();
     this.props.loadFilterAttendance(this.state.attendanceObj);
     this.setState({
-      currentMonth: Moment(new Date()).format('MMMM'),
-      currentYear: Moment(new Date()).format('YYYY')
+      'currentMonth': Moment(new Date()).format('MMMM'),
+      'currentYear': Moment(new Date()).format('YYYY')
     });
   }
 
   onEmployeeChangeHandler = (e) => {
     const { attendanceObj } = this.state;
-    if (e.target.value === "") {
-      attendanceObj["id"] = undefined;
-    }
-    else {
+    if (e.target.value !== "") {
       attendanceObj["id"] = e.target.value;
     }
+    else {
+      delete attendanceObj["id"];
+    }
     this.setState({ attendanceObj });
+    console.log(attendanceObj);
   }
 
   onMonthChangeHandler = (e) => {
-    const { attendanceObj } = this.state;
-    attendanceObj["month"] = parseInt(e.target.value, 10) + 1;
-    this.setState({ attendanceObj });
+    const { monthYearObject } = this.state;
+    monthYearObject["year"] = parseInt(e.target.value, 10) + 1;
+    this.setState({ monthYearObject });
   }
 
   onYearChangeHandler = (e) => {
-    const { attendanceObj } = this.state;
-    attendanceObj["year"] = parseInt(e.target.value, 10);
-    this.setState({ attendanceObj });
+    const { monthYearObject } = this.state;
+    monthYearObject["year"] = parseInt(e.target.value, 10);
+    this.setState({ monthYearObject });
   }
 
   onSearch = () => {
-    const { attendanceObj } = this.state;
-    attendanceObj["startDate"] = Moment(new Date(attendanceObj.year + "-" + attendanceObj.month + "-01")).format("YYYY-MM-DD hh:mm:ss");
-    if ((attendanceObj.month - 1 === new Date().getMonth()) && (attendanceObj.year === new Date().getFullYear())) {
+    const { attendanceObj, monthYearObject } = this.state;
+    attendanceObj["startDate"] = Moment(new Date(monthYearObject.year + "-" + monthYearObject.month + "-01")).format("YYYY-MM-DD hh:mm:ss");
+    if ((monthYearObject.month - 1 === new Date().getMonth()) && (monthYearObject.year === new Date().getFullYear())) {
       attendanceObj["endDate"] = Moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
     }
     else {
-      attendanceObj["endDate"] = Moment(new Date(attendanceObj.year, attendanceObj.month, 0)).format("YYYY-MM-DD hh:mm:ss");
+      attendanceObj["endDate"] = Moment(new Date(this.state.year, this.state.month, 0)).format("YYYY-MM-DD hh:mm:ss");
     }
     this.props.loadFilterAttendance(this.state.attendanceObj);
   }
@@ -78,7 +88,7 @@ class Attendance extends React.Component {
 
     let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
     let hasAttendances = (this.props.filterAttendance.length !== 0) ? true : false;
-   
+
     return (
       <div>
         <SideNavBar />
@@ -98,7 +108,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
-                    {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={i} >{month}</option>)}
+                    {this.state.monthList.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={month} selected >{month}</option> : <option key={i} value={month} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
@@ -106,7 +116,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="year" onChange={this.onYearChangeHandler}>
-                    {this.state.year.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={year} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
+                    {this.state.yearList.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={year} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
               </Col>

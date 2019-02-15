@@ -69,6 +69,7 @@ class SideNavBar extends Component {
             <Link to="attendance"><div onClick={this.CloseSideNav}><Glyphicon glyph="align-center" className="mr-15"></Glyphicon>Attendance</div></Link>,
             <Link to="employeelist"><div onClick={this.CloseSideNav}><Glyphicon glyph="user" className="mr-15"></Glyphicon>Employee</div></Link>,
             <Link to="userlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="lock" className="mr-15"></Glyphicon>User</div></Link>,
+            <Link to="organizationlist"><div onClick={this.CloseSideNav}><Glyphicon glyph="home" className="mr-15"></Glyphicon>Organization</div></Link>,
             <Link to="calendar"><div onClick={this.CloseSideNav}><Glyphicon glyph="calendar" className="mr-15"></Glyphicon>Calendar</div></Link>
             ]
           }

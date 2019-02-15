@@ -26,8 +26,8 @@ class Calendar extends React.Component {
       calenderObj: {},
       'month': ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
       'weekDays': ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
-      currentMonth: "",
-      currentYear: "",
+      'currentMonth': "",
+      'currentYear': "",
       userAttendance: {}
 
     };
@@ -39,8 +39,8 @@ class Calendar extends React.Component {
     this.props.loadEmployeeInfo();
     this.props.loadAttendance();
     this.setState({
-      currentMonth: Moment(new Date()).format('MMMM'),
-      currentYear: Moment(new Date()).format('YYYY')
+      'currentMonth': Moment(new Date()).format('MMMM'),
+      'currentYear': Moment(new Date()).format('YYYY')
     });
     calenderObj["month"] = new Date().getMonth() + 1;
     calenderObj["year"] = new Date().getFullYear();
@@ -210,7 +210,7 @@ class Calendar extends React.Component {
 
     const { yearList } = this.state;
     let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
-    
+
     return (
       <div>
         <SideNavBar />

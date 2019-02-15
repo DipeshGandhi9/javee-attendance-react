@@ -1,44 +1,43 @@
 import Cookies from 'universal-cookie';
 
-import { API_URL, FETCH_EMPLOYEE, FETCH_EMPLOYEES, REMOVE_FETCH_EMPLOYEE, UPDATE_FETCH_EMPLOYEE } from '../store/constants.js';
+import { API_URL, FETCH_ORGANIZATIONS, FETCH_ORGANIZATION, REMOVE_FETCH_ORGANIZATION, UPDATE_FETCH_ORGANIZATION } from '../store/constants.js';
 
 const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
-console.log(token);
 
-export const loadEmployeeInfo = () => dispach => {
+export const loadOrganizationInfo = () => dispach => {
   if (cookies.get("token") === undefined) {
     window.open("/", "_SELF");
   }
   else {
 
-    fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
+    fetch(API_URL + 'api/organizations', { method: 'GET', headers: { "Authorization": token } })
       .then(response => response.json())
       .then(json => {
         dispach({
-          type: FETCH_EMPLOYEES,
+          type: FETCH_ORGANIZATIONS,
           payload: json
         });
       })
       .catch(eror => {
         dispach({
-          type: FETCH_EMPLOYEES,
+          type: FETCH_ORGANIZATIONS,
           payload: []
         });
       });
   }
 }
 
-export const addEmployeeInfo = (employee, cb) => dispach => {
+export const addOrganizationInfo = (organization, cb) => dispach => {
 
-  fetch(API_URL + 'api/employee/', {
+  fetch(API_URL + 'api/organization/', {
     method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
-    body: JSON.stringify(employee)
+    body: JSON.stringify(organization)
   })
     .then(response => response.json())
     .then(json => {
       dispach({
-        type: FETCH_EMPLOYEE,
+        type: FETCH_ORGANIZATION,
         payload: json
       });
       if (typeof cb === "function") {
@@ -47,7 +46,7 @@ export const addEmployeeInfo = (employee, cb) => dispach => {
     })
     .catch(eror => {
       dispach({
-        type: FETCH_EMPLOYEE,
+        type: FETCH_ORGANIZATION,
         payload: {}
       });
       if (typeof cb === "function") {
@@ -56,35 +55,35 @@ export const addEmployeeInfo = (employee, cb) => dispach => {
     });
 }
 
-export const deleteEmployeeInfo = id => dispach => {
+export const deleteOrganizationInfo = id => dispach => {
 
-  fetch(API_URL + 'api/employee/' + id, { method: 'DELETE', headers: { "Authorization": token } })
+  fetch(API_URL + 'api/organization/' + id, { method: 'DELETE', headers: { "Authorization": token } })
     .then(response => response.json())
     .then(json => {
       dispach({
-        type: REMOVE_FETCH_EMPLOYEE,
+        type: REMOVE_FETCH_ORGANIZATION,
         payload: id
       });
     })
     .catch(eror => {
       dispach({
-        type: REMOVE_FETCH_EMPLOYEE,
+        type: REMOVE_FETCH_ORGANIZATION,
         payload: null
       });
     });
 }
 
-export const updateEmployeeInfo = (employee, cb) => dispach => {
+export const updateOrganizationInfo = (organization, cb) => dispach => {
 
-  fetch(API_URL + 'api/employee/' + employee.id, {
-    method: 'PUT', body: JSON.stringify(employee),
+  fetch(API_URL + 'api/organization/' + organization.id, {
+    method: 'PUT', body: JSON.stringify(organization),
     headers: { 'Content-Type': 'application/json', "Authorization": token }, credentials: 'same-origin'
   })
     .then(response => response)
     .then(json => {
       dispach({
-        type: UPDATE_FETCH_EMPLOYEE,
-        payload: employee
+        type: UPDATE_FETCH_ORGANIZATION,
+        payload: organization
       });
       if (typeof cb === "function") {
         cb();
@@ -92,7 +91,7 @@ export const updateEmployeeInfo = (employee, cb) => dispach => {
     })
     .catch(eror => {
       dispach({
-        type: UPDATE_FETCH_EMPLOYEE,
+        type: UPDATE_FETCH_ORGANIZATION,
         payload: []
       });
       if (typeof cb === "function") {
