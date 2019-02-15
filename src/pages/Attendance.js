@@ -35,7 +35,6 @@ class Attendance extends React.Component {
       yearList,
       'currentMonth': "",
       'currentYear': "",
-
     };
   }
 
@@ -57,12 +56,11 @@ class Attendance extends React.Component {
       delete attendanceObj["id"];
     }
     this.setState({ attendanceObj });
-    console.log(attendanceObj);
   }
 
   onMonthChangeHandler = (e) => {
     const { monthYearObject } = this.state;
-    monthYearObject["year"] = parseInt(e.target.value, 10) + 1;
+    monthYearObject["month"] = parseInt(e.target.value, 10)+1;
     this.setState({ monthYearObject });
   }
 
@@ -79,7 +77,7 @@ class Attendance extends React.Component {
       attendanceObj["endDate"] = Moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
     }
     else {
-      attendanceObj["endDate"] = Moment(new Date(this.state.year, this.state.month, 0)).format("YYYY-MM-DD hh:mm:ss");
+      attendanceObj["endDate"] = Moment(new Date(monthYearObject.year, monthYearObject.month, 0)).format("YYYY-MM-DD hh:mm:ss");
     }
     this.props.loadFilterAttendance(this.state.attendanceObj);
   }
@@ -88,6 +86,7 @@ class Attendance extends React.Component {
 
     let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
     let hasAttendances = (this.props.filterAttendance.length !== 0) ? true : false;
+    console.log(this.props.filterAttendance);
 
     return (
       <div>
@@ -108,7 +107,7 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
-                    {this.state.monthList.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={month} selected >{month}</option> : <option key={i} value={month} >{month}</option>)}
+                    {this.state.monthList.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected >{month}</option> : <option key={i} value={i} >{month}</option>)}
                   </FormControl>
                 </Form>
               </Col>
