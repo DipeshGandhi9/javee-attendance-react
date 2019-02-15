@@ -86,7 +86,6 @@ class Attendance extends React.Component {
 
     let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
     let hasAttendances = (this.props.filterAttendance.length !== 0) ? true : false;
-    console.log(this.props.filterAttendance);
 
     return (
       <div>
