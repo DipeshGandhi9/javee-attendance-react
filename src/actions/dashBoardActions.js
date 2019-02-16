@@ -8,7 +8,7 @@ const token = "Bearer " + cookies.get('token');
 export const loadDashBoard = (date) => dispach => {
 
     fetch(API_URL + 'api/dashboard/', {
-        method: 'POST',  headers: { 'Content-Type': 'application/json', 'Authorization': token },
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
         body: JSON.stringify(date)
     })
         .then(response => response.json())
