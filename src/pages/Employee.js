@@ -31,6 +31,7 @@ class Employee extends Component {
     }
 
     componentDidMount() {
+        this.props.loadOrganizationInfo();
         var queryParameters = queryString.parse(this.props.location.search);
         if (queryParameters['id']) {
             this.getEmployeeObj(queryParameters['id']);
