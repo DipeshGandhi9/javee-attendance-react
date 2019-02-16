@@ -28,14 +28,11 @@ class Calendar extends React.Component {
       'weekDays': ['Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
       'currentMonth': "",
       'currentYear': "",
-      userAttendance: {}
-
     };
   }
 
   componentDidMount = () => {
     const { calenderObj } = this.state;
-
     this.props.loadEmployeeInfo();
     this.props.loadAttendance();
     this.setState({
@@ -46,7 +43,6 @@ class Calendar extends React.Component {
     calenderObj["year"] = new Date().getFullYear();
     this.setState({ calenderObj });
     this.calenderCard();
-
   }
 
   calenderCard = () => {

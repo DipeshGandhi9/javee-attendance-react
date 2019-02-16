@@ -24,8 +24,8 @@ class Attendance extends React.Component {
 
     this.state = {
       attendanceObj: {
-        "startDate": Moment(new Date(new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-01")).format('YYYY-MM-DD hh:mm:ss'),
-        "endDate": Moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+        "startDate": new Date(new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-01"),
+        "endDate": new Date(),
       },
       monthYearObject: {
         "month": new Date().getMonth() + 1,
@@ -50,34 +50,36 @@ class Attendance extends React.Component {
   onEmployeeChangeHandler = (e) => {
     const { attendanceObj } = this.state;
     if (e.target.value !== "") {
-      attendanceObj["id"] = e.target.value;
+      attendanceObj["employeeId"] = e.target.value;
     }
     else {
-      delete attendanceObj["id"];
+      delete attendanceObj["employeeId"];
     }
     this.setState({ attendanceObj });
   }
 
   onMonthChangeHandler = (e) => {
     const { monthYearObject } = this.state;
-    monthYearObject["month"] = parseInt(e.target.value, 10)+1;
+    monthYearObject["month"] = parseInt(e.target.value, 10) + 1;
     this.setState({ monthYearObject });
+    console.log(this.state);
   }
 
   onYearChangeHandler = (e) => {
     const { monthYearObject } = this.state;
     monthYearObject["year"] = parseInt(e.target.value, 10);
     this.setState({ monthYearObject });
+    console.log(this.state);
   }
 
   onSearch = () => {
     const { attendanceObj, monthYearObject } = this.state;
-    attendanceObj["startDate"] = Moment(new Date(monthYearObject.year + "-" + monthYearObject.month + "-01")).format("YYYY-MM-DD hh:mm:ss");
+    attendanceObj["startDate"] = new Date(monthYearObject.year + "-" + monthYearObject.month + "-01");
     if ((monthYearObject.month - 1 === new Date().getMonth()) && (monthYearObject.year === new Date().getFullYear())) {
-      attendanceObj["endDate"] = Moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
+      attendanceObj["endDate"] = new Date();
     }
     else {
-      attendanceObj["endDate"] = Moment(new Date(monthYearObject.year, monthYearObject.month, 0)).format("YYYY-MM-DD hh:mm:ss");
+      attendanceObj["endDate"] = new Date(monthYearObject.year, monthYearObject.month, 0);
     }
     this.props.loadFilterAttendance(this.state.attendanceObj);
   }

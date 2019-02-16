@@ -6,26 +6,22 @@ const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
 
 export const loadOrganizationInfo = () => dispach => {
-  if (cookies.get("token") === undefined) {
-    window.open("/", "_SELF");
-  }
-  else {
 
-    fetch(API_URL + 'api/organizations', { method: 'GET', headers: { "Authorization": token } })
-      .then(response => response.json())
-      .then(json => {
-        dispach({
-          type: FETCH_ORGANIZATIONS,
-          payload: json
-        });
-      })
-      .catch(eror => {
-        dispach({
-          type: FETCH_ORGANIZATIONS,
-          payload: []
-        });
+  fetch(API_URL + 'api/organizations', { method: 'GET', headers: { "Authorization": token } })
+    .then(response => response.json())
+    .then(json => {
+      dispach({
+        type: FETCH_ORGANIZATIONS,
+        payload: json
       });
-  }
+    })
+    .catch(eror => {
+      window.open("/", "_SELF");
+      dispach({
+        type: FETCH_ORGANIZATIONS,
+        payload: []
+      });
+    });
 }
 
 export const addOrganizationInfo = (organization, cb) => dispach => {

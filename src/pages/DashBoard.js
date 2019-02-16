@@ -9,31 +9,46 @@ import Moment from 'moment';
 import "./Pages.css";
 
 import SideNavBar from '../components/SideNavBar.js';
-import { getTotalEmployee, getPresentEmployeeList, getPresentEmployee, getLeaveEmployee } from '../actions/dashBoardActions';
+import { loadDashBoard } from '../actions/dashBoardActions';
 
 class DashBoard extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            date: new Date()
+            dashBoardObject: {
+                date: new Date()
+            }
         };
     }
 
     componentDidMount = () => {
-        const date = Moment(this.state.date).format('YYYY-MM-DD hh:mm:ss');
-        this.props.getTotalEmployee();
-        this.props.getPresentEmployeeList(date);
-        this.props.getPresentEmployee(date);
-        this.props.getLeaveEmployee(date);
+        this.props.loadDashBoard(this.state.dashBoardObject);
     }
 
-    onChange = (date) => {
-        this.setState({ date });
-        this.props.getPresentEmployeeList(Moment(this.state.date).format('YYYY-MM-DD hh:mm:ss'));
+    onChange = (d) => {
+        const { dashBoardObject } = this.state;
+        dashBoardObject["date"] = d;
+        this.setState({ dashBoardObject });
+        this.props.loadDashBoard(this.state.dashBoardObject);
     }
 
     render() {
+        let test = [];
+        if (this.props.dashBoard.attendances !== undefined) {
+
+            test = this.props.dashBoard.attendances.map((user, id) => {
+                return (
+                    <tr key={id}>
+                        <td>{id + 1}</td>
+                        <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
+                        <td>{user.timeInDate ? Moment(user.timeInDate).format('h:mm:ss a') : ""}</td>
+                        <td>{user.timeOutDate ? Moment(user.timeOutDate).format('h:mm:ss a') : ""}</td>
+                    </tr>
+                );
+            })
+        }
+
         return (
             <div>
                 <SideNavBar />
@@ -44,7 +59,7 @@ class DashBoard extends Component {
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-1" >
                                     <div>
-                                        <h1>{this.props.totalEmployee}</h1>
+                                        <h1>{this.props.dashBoard.totalEmployee}</h1>
                                         <h3>Total Employee</h3>
                                     </div>
                                 </Panel.Body>
@@ -54,7 +69,7 @@ class DashBoard extends Component {
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-2" >
                                     <div>
-                                        <h1>{this.props.presentEmployee}</h1>
+                                        <h1>{this.props.dashBoard.presentCount}</h1>
                                         <h3>Today Present's</h3>
                                     </div>
                                 </Panel.Body>
@@ -64,7 +79,7 @@ class DashBoard extends Component {
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-3" >
                                     <div>
-                                        <h1>{this.props.leaveEmployee}</h1>
+                                        <h1>{this.props.dashBoard.leaveCount}</h1>
                                         <h3>Today on Leave</h3>
                                     </div>
                                 </Panel.Body>
@@ -88,9 +103,8 @@ class DashBoard extends Component {
                                 <Panel.Body className="h-300 p-0">
                                     <Calendar id="calender"
                                         onChange={this.onChange}
-
                                         calendarType="US"
-                                        value={this.state.date}
+                                        value={this.state.dashBoardObject.date}
                                     />
                                 </Panel.Body>
                             </Panel>
@@ -108,16 +122,7 @@ class DashBoard extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {this.props.presentEmployeeList.map((user, id) => {
-                                                return (
-                                                    <tr key={id}>
-                                                        <td>{id + 1}</td>
-                                                        <td>{user.employee ? user.employee.firstName + " " + user.employee.lastName : ""}</td>
-                                                        <td>{user.timeInDate ? Moment(user.timeInDate).format('h:mm:ss a') : ""}</td>
-                                                        <td>{user.timeOutDate ? Moment(user.timeOutDate).format('h:mm:ss a') : ""}</td>
-                                                    </tr>
-                                                );
-                                            })}
+                                            {test}
                                         </tbody>
                                     </Table>
                                 </Panel.Body>
@@ -131,15 +136,12 @@ class DashBoard extends Component {
 }
 const mapStateToProps = state => ({
     tableHeader: state.app.presentEmployeeHeader,
-    totalEmployee: state.app.totalEmployees,
-    presentEmployee: state.app.presentEmployees,
-    leaveEmployee: state.app.leaveEmployees,
-    presentEmployeeList: state.app.presentEmployeesList
+    dashBoard: state.app.loadDashBoard,
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        getTotalEmployee, getPresentEmployeeList, getPresentEmployee, getLeaveEmployee
+        loadDashBoard
     }, dispatch)
 )(DashBoard));

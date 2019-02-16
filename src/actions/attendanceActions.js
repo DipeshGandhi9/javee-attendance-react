@@ -6,26 +6,22 @@ const cookies = new Cookies();
 const token = "Bearer " + cookies.get('token');
 
 export const loadAttendance = () => dispach => {
-  if (cookies.get("token") === undefined) {
-    window.open("/", "_SELF");
-  }
-  else {
 
-    fetch(API_URL + 'api/attendance/', { method: 'GET', headers: { "Authorization": token } })
-      .then(response => response.json())
-      .then(json => {
-        dispach({
-          type: GET_ALL_ATTENDANCE,
-          payload: json
-        });
-      })
-      .catch(eror => {
-        dispach({
-          type: GET_ALL_ATTENDANCE,
-          payload: []
-        });
+  fetch(API_URL + 'api/attendance/', { method: 'GET', headers: { "Authorization": token } })
+    .then(response => response.json())
+    .then(json => {
+      dispach({
+        type: GET_ALL_ATTENDANCE,
+        payload: json
       });
-  }
+    })
+    .catch(eror => {
+      window.open("/", "_SELF");
+      dispach({
+        type: GET_ALL_ATTENDANCE,
+        payload: []
+      });
+    });
 }
 
 export const addTimeInAttendance = (attendance) => dispach => {
@@ -99,27 +95,22 @@ export const updateAttendance = (attendance, cb) => dispach => {
 
 export const loadFilterAttendance = (attendance) => dispach => {
 
-  if (cookies.get("token") === undefined) {
-    window.open("/", "_SELF");
-  }
-  else {
-
-    fetch(API_URL + "api/attendance/filter", {
-      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
-      body: JSON.stringify(attendance)
-    })
-      .then(response => response.json())
-      .then(json => {
-        dispach({
-          type: GET_FILTER_ATTENDANCE,
-          payload: json
-        });
-      })
-      .catch(eror => {
-        dispach({
-          type: GET_FILTER_ATTENDANCE,
-          payload: []
-        });
+  fetch(API_URL + "api/attendance/filter", {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': token },
+    body: JSON.stringify(attendance)
+  })
+    .then(response => response.json())
+    .then(json => {
+      dispach({
+        type: GET_FILTER_ATTENDANCE,
+        payload: json
       });
-  }
+    })
+    .catch(eror => {
+      dispach({
+        type: GET_FILTER_ATTENDANCE,
+        payload: []
+      });
+    });
 }
+

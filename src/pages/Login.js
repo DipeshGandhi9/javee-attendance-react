@@ -69,12 +69,11 @@ class Login extends Component {
   }
 
   onResetClick = (e) => {
-    this.setState((state) => {
-      state.attendanceObj.userName = '';
-      state.attendanceObj.password = '';
-      state.attendanceObj.errorMessage = '';
-      return state;
-    })
+    const {attendanceObj} =  this.state;
+    attendanceObj["userName"] = '';
+    attendanceObj["password"] = '';
+    attendanceObj["errorMessage"] = '';
+    this.setState({attendanceObj});
   }
 
   onLoginClick = () => {

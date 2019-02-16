@@ -7,27 +7,24 @@ const token = "Bearer " + cookies.get('token');
 console.log(token);
 
 export const loadEmployeeInfo = () => dispach => {
-  if (cookies.get("token") === undefined) {
-    window.open("/", "_SELF");
-  }
-  else {
 
-    fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
-      .then(response => response.json())
-      .then(json => {
-        dispach({
-          type: FETCH_EMPLOYEES,
-          payload: json
-        });
-      })
-      .catch(eror => {
-        dispach({
-          type: FETCH_EMPLOYEES,
-          payload: []
-        });
+  fetch(API_URL + 'api/employees', { method: 'GET', headers: { "Authorization": token } })
+    .then(response => response.json())
+    .then(json => {
+      dispach({
+        type: FETCH_EMPLOYEES,
+        payload: json
       });
-  }
+    })
+    .catch(eror => {
+      window.open("/", "_SELF");
+      dispach({
+        type: FETCH_EMPLOYEES,
+        payload: []
+      });
+    });
 }
+
 
 export const addEmployeeInfo = (employee, cb) => dispach => {
 

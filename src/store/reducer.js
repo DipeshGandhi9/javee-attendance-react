@@ -46,10 +46,7 @@ const initialState = {
         'timeIn': 'Time In',
         'timeOut': 'Time Out'
     },
-    totalEmployees: null,
-    presentEmployeesList: [],
-    presentEmployees: null,
-    leaveEmployees: null,
+    loadDashBoard: {},
     presentEmployeeHeader: {
         'id': 'Sr No.',
         'employeeName': 'Employee Name',
@@ -179,27 +176,12 @@ const reducer = (state = initialState, action) => {
             };
 
         //--DashBoard--//
-        case types.TOTAL_EMPLOYEES:
+        case types.LOAD_DASHBOARD:
             return {
                 ...state,
-                totalEmployees: action.payload,
+                loadDashBoard: action.payload,
             };
-        case types.PRESENT_EMPLOYEES_LIST:
-            return {
-                ...state,
-                presentEmployeesList: action.payload,
-            };
-        case types.PRESENT_EMPLOYEES:
-            return {
-                ...state,
-                presentEmployees: action.payload,
-            };
-        case types.LEAVE_EMPLOYEES:
-            return {
-                ...state,
-                leaveEmployees: action.payload,
-            };
-
+        
 
         default:
             return state;
