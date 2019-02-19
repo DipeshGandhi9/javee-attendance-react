@@ -130,7 +130,6 @@ class Employee extends Component {
     render() {
 
         let hasOrganization = (this.props.organizationList.length !== 0) ? true : false;
-
         let selectedOrganization = [];
         for (var keyValue in this.state.employeeObj.organization) {
             selectedOrganization.push(this.state.employeeObj.organization[keyValue]);

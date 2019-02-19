@@ -85,8 +85,10 @@ class Attendance extends React.Component {
   }
 
   render() {
-
-    let hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+    let hasEmployee;
+    if (this.props.employeeList.length !== undefined) {
+      hasEmployee = (this.props.employeeList.length !== 0) ? true : false;
+    }
     let hasAttendances = (this.props.filterAttendance.length !== 0) ? true : false;
 
     return (
@@ -98,10 +100,14 @@ class Attendance extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name='employeeName' onChange={this.onEmployeeChangeHandler}>
-                    <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
-                    {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
-                  </FormControl>
+                  {hasEmployee ?
+                    <FormControl componentClass="select" name='employeeName' onChange={this.onEmployeeChangeHandler}>
+                      <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
+                      {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
+                    </FormControl> :
+                    <FormControl componentClass="select" name='employeeName'>
+                      <option>{this.props.employeeList.firstName}</option>
+                    </FormControl>}
                 </Form>
               </Col>
 
@@ -131,7 +137,7 @@ class Attendance extends React.Component {
 
           <Row>
             <Col lg={12}>
-              <Table responsive bordered condensed>
+              <Table responsive bordered striped >
                 <thead>
                   <tr>
                     <th>
@@ -148,6 +154,7 @@ class Attendance extends React.Component {
                     </th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {this.props.filterAttendance.map((user) => {
                     return (
@@ -160,6 +167,7 @@ class Attendance extends React.Component {
                     );
                   })}
                 </tbody>
+                
               </Table>
             </Col>
           </Row>

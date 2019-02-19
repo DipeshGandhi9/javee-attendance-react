@@ -20,10 +20,8 @@ class BreakTimeModal extends Component {
         const { time } = this.state;
         return (
             <div>
-                <Button bsSize="large" className="button" onClick={() => this.setState({ show: true })}>
-                    Break
-          </Button>
-
+                <Button bsSize="large" className="button" onClick={() => this.setState({ show: true })}>Break</Button>
+          
                 <Modal show={this.state.show} onHide={this.handleHide} container={this} aria-labelledby="contained-modal-title">
                     <Modal.Header closeButton>
                         <h3 className="mt-10">Break Time</h3>

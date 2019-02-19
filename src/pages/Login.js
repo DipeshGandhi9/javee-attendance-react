@@ -8,7 +8,7 @@ import Cookies from 'universal-cookie';
 
 import './Pages.css';
 
-import { authSiteLoginUser, authLoginUser } from '../actions/userActions';
+import { authUser } from '../actions/userActions';
 import { addTimeInAttendance, addTimeOutAttendance, updateAttendance } from '../actions/attendanceActions';
 import ModalManual from './ModalManual.js';
 //import BreakTimeModal from './BreakTimeModal';
@@ -51,7 +51,7 @@ class Login extends Component {
   onSiteLoginClick = () => {
     const { attendanceObj } = this.state;
     if (this.state.attendanceObj.userName !== "" && this.state.attendanceObj.userName !== "") {
-      this.props.authSiteLoginUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
+      this.props.authUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
           this.setState({ showSiteLogin: false });
           window.open("/dashboard", "_SELF");
@@ -79,7 +79,7 @@ class Login extends Component {
   onLoginClick = () => {
     const { attendanceObj } = this.state;
     if (this.state.attendanceObj.userName !== "" && this.state.attendanceObj.userName !== "") {
-      this.props.authLoginUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
+      this.props.authUser(this.state.attendanceObj.userName, this.state.attendanceObj.password, (error) => {
         if (!error) {
           if (this.state.isLoggedIn === false) {
             attendanceObj["timeOutDate"] = new Date();
@@ -273,6 +273,6 @@ const mapStateToProps = state => ({
 export default withRouter(connect(
   mapStateToProps,
   dispatch => bindActionCreators({
-    authSiteLoginUser, authLoginUser, addTimeInAttendance, addTimeOutAttendance, updateAttendance
+    authUser, addTimeInAttendance, addTimeOutAttendance, updateAttendance
   }, dispatch)
 )(Login));

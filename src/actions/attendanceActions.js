@@ -16,7 +16,7 @@ export const loadAttendance = () => dispach => {
       });
     })
     .catch(eror => {
-      window.open("/", "_SELF");
+      //window.open("/", "_SELF");
       dispach({
         type: GET_ALL_ATTENDANCE,
         payload: []

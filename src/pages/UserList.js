@@ -51,7 +51,7 @@ class UserList extends React.Component {
                     <div className="mt-30">
                         <Row>
                             <Col lg={12} >
-                                <Table responsive bordered condensed>
+                                <Table responsive bordered striped>
                                     <thead>
                                         <tr>
                                             <th>

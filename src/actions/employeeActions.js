@@ -17,7 +17,7 @@ export const loadEmployeeInfo = () => dispach => {
       });
     })
     .catch(eror => {
-      window.open("/", "_SELF");
+      // window.open("/", "_SELF");
       dispach({
         type: FETCH_EMPLOYEES,
         payload: []

@@ -16,7 +16,7 @@ export const loadOrganizationInfo = () => dispach => {
       });
     })
     .catch(eror => {
-      window.open("/", "_SELF");
+      //window.open("/", "_SELF");
       dispach({
         type: FETCH_ORGANIZATIONS,
         payload: []

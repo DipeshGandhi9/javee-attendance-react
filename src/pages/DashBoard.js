@@ -34,10 +34,10 @@ class DashBoard extends Component {
     }
 
     render() {
-        let test = [];
+        let attendanceList = [];
         if (this.props.dashBoard.attendances !== undefined) {
 
-            test = this.props.dashBoard.attendances.map((user, id) => {
+            attendanceList = this.props.dashBoard.attendances.map((user, id) => {
                 return (
                     <tr key={id}>
                         <td>{id + 1}</td>
@@ -55,6 +55,7 @@ class DashBoard extends Component {
                 <Grid fluid>
                     <br></br>
                     <Row>
+
                         <Col lg={3} md={3} sm={6} xs={12}>
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-1" >
@@ -65,6 +66,7 @@ class DashBoard extends Component {
                                 </Panel.Body>
                             </Panel>
                         </Col>
+
                         <Col lg={3} md={3} sm={6} xs={12}>
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-2" >
@@ -75,6 +77,7 @@ class DashBoard extends Component {
                                 </Panel.Body>
                             </Panel>
                         </Col>
+
                         <Col lg={3} md={3} sm={6} xs={12}>
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-3" >
@@ -85,6 +88,7 @@ class DashBoard extends Component {
                                 </Panel.Body>
                             </Panel>
                         </Col>
+
                         <Col lg={3} md={3} sm={6} xs={12}>
                             <Panel >
                                 <Panel.Body className="h-150 background-image img-4" >
@@ -95,9 +99,11 @@ class DashBoard extends Component {
                                 </Panel.Body>
                             </Panel>
                         </Col>
+
                     </Row>
                     <br></br>
                     <Row>
+
                         <Col lg={6} md={6} sm={12}>
                             <Panel>
                                 <Panel.Body className="h-300 p-0">
@@ -109,6 +115,7 @@ class DashBoard extends Component {
                                 </Panel.Body>
                             </Panel>
                         </Col>
+
                         <Col lg={6} md={6} sm={12}>
                             <Panel >
                                 <Panel.Body className="h-300">
@@ -122,12 +129,13 @@ class DashBoard extends Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {test}
+                                            {attendanceList}
                                         </tbody>
                                     </Table>
                                 </Panel.Body>
                             </Panel>
                         </Col>
+                        
                     </Row>
                 </Grid>
             </div>

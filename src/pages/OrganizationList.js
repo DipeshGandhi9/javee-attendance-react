@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 
 import './Pages.css';
+
 import SideNavBar from '../components/SideNavBar.js';
 import { loadOrganizationInfo, deleteOrganizationInfo } from '../actions/organizationActions';
 
@@ -30,7 +31,7 @@ class OrganizationList extends React.Component {
         this.props.loadOrganizationInfo();
     }
 
-    deleteEmployee = (e, id) => {
+    deleteOrganization = (e, id) => {
         e.preventDefault();
         this.props.deleteOrganizationInfo(id);
         this.setState({ show: false });
@@ -58,7 +59,7 @@ class OrganizationList extends React.Component {
                     <div className="mt-30">
                         <Row>
                             <Col lg={12} >
-                                <Table responsive bordered condensed>
+                                <Table responsive bordered striped>
                                     <thead>
                                         <tr>
                                             <th>
@@ -106,7 +107,7 @@ class OrganizationList extends React.Component {
                                 </Table>
                             </Col>
                         </Row>
-                        {hasEmployees ? "" : <h4 align="center" style={{ color: 'grey' }}> No Organizations are available to display. Please add new employee</h4>}
+                        {hasEmployees ? "" : <h4 align="center" style={{ color: 'grey' }}> No Organizations are available to display. Please add new organization</h4>}
                     </div>
 
                     <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
@@ -120,7 +121,7 @@ class OrganizationList extends React.Component {
                             </Modal.Body>
                         <Modal.Footer>
                             <div>
-                                <Button className="delete-modal-button" onClick={(e) => this.deleteOrganizationInfo(e, this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={(e) => this.deleteOrganization(e, this.state.id)}>CONFIRM</Button>
                                 <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                         </Modal.Footer>

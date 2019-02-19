@@ -1,4 +1,5 @@
 import Cookies from 'universal-cookie';
+import jwt_decode from 'jwt-decode';
 
 import { API_URL, FETCH_USERS, FETCH_USER, REMOVE_FETCH_USER, UPDATE_FETCH_USER } from '../store/constants.js';
 
@@ -16,7 +17,7 @@ export const loadUserInfo = () => dispach => {
       });
     })
     .catch(eror => {
-      window.open("/", "_SELF");
+     // window.open("/", "_SELF");
       dispach({
         type: FETCH_USERS,
         payload: []
@@ -97,7 +98,7 @@ export const updateUserInfo = (user, cb) => dispach => {
     });
 }
 
-export const authSiteLoginUser = (userName, password, cb) => dispach => {
+export const authUser = (userName, password, cb) => dispach => {
 
   fetch(API_URL + 'authenticate', {
     method: 'POST', body: JSON.stringify({ userName, password }),
@@ -107,44 +108,32 @@ export const authSiteLoginUser = (userName, password, cb) => dispach => {
     .then(json => {
 
       cookies.set('userName', userName);
-      cookies.remove('token');
       cookies.set('token', json.accessToken, { expires: new Date(Date.now() + 8.64e+7) });
-      if (typeof cb === "function") {
-        cb();
+      var decoded = jwt_decode(cookies.get('token'));
+      cookies.set('role', decoded.role);
+      if(decoded.role === "ADMIN"){
+        if (typeof cb === "function") {
+          cb();
+        }
       }
-    })
-    .catch(eror => {
-      if (typeof cb === "function") {
-        cb(eror);
-      }
-    });
-}
-
-export const authLoginUser = (userName, password, cb) => dispach => {
-
-  fetch(API_URL + 'authenticate', {
-    method: 'POST', body: JSON.stringify({ userName, password }),
-    headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin'
-  })
-    .then(response => response.json())
-    .then(json => {
-
-      fetch(API_URL + 'api/user/loggedin', {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json', "Authorization": "Bearer " + json.accessToken }, credentials: 'same-origin'
-      })
-        .then(response => response.json())
-        .then(json => {
-          cookies.remove('employeeId');
-          cookies.set('employeeId', json.employee.id);
-          if (typeof cb === "function") {
-            cb();
-          }
+      if (decoded.role === "EMPLOYEE") {
+        fetch(API_URL + 'api/user/loggedin', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json', "Authorization": "Bearer " + json.accessToken }, credentials: 'same-origin'
         })
-        .catch(eror => {
-          if (typeof cb === "function") {
-            cb(eror);
-          }
-        });
+          .then(response => response.json())
+          .then(json => {
+            cookies.remove('employeeId');
+            cookies.set('employeeId', json.employee.id);
+            if (typeof cb === "function") {
+              cb();
+            }
+          })
+          .catch(eror => {
+            if (typeof cb === "function") {
+              cb(eror);
+            }
+          });
+      }
     });
 }
