@@ -31,9 +31,9 @@ class OrganizationList extends React.Component {
         this.props.loadOrganizationInfo();
     }
 
-    deleteOrganization = (e, id) => {
+    deleteOrganization = (e) => {
         e.preventDefault();
-        this.props.deleteOrganizationInfo(id);
+        this.props.deleteOrganizationInfo(this.state.id);
         this.setState({ show: false });
     }
 
@@ -121,7 +121,7 @@ class OrganizationList extends React.Component {
                             </Modal.Body>
                         <Modal.Footer>
                             <div>
-                                <Button className="delete-modal-button" onClick={(e) => this.deleteOrganization(e, this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={this.deleteOrganization}>CONFIRM</Button>
                                 <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                         </Modal.Footer>

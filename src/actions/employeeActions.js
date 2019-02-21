@@ -56,7 +56,7 @@ export const addEmployeeInfo = (employee, cb) => dispach => {
 export const deleteEmployeeInfo = id => dispach => {
 
   fetch(API_URL + 'api/employee/' + id, { method: 'DELETE', headers: { "Authorization": token } })
-    .then(response => response.json())
+    .then(response =>response)
     .then(json => {
       dispach({
         type: REMOVE_FETCH_EMPLOYEE,

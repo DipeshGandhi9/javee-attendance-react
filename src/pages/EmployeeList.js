@@ -30,9 +30,9 @@ class EmployeeList extends React.Component {
         this.props.loadEmployeeInfo();
     }
 
-    deleteEmployee = (e, id) => {
+    deleteEmployee = (e) => {
         e.preventDefault();
-        this.props.deleteEmployeeInfo(id);
+        this.props.deleteEmployeeInfo(this.state.id);
         this.setState({ show: false });
     }
 
@@ -140,7 +140,7 @@ class EmployeeList extends React.Component {
                             </Modal.Body>
                         <Modal.Footer>
                             <div>
-                                <Button className="delete-modal-button" onClick={(e) => this.deleteEmployee(e, this.state.id)}>CONFIRM</Button>
+                                <Button className="delete-modal-button" onClick={this.deleteEmployee}>CONFIRM</Button>
                                 <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
                             </div>
                         </Modal.Footer>

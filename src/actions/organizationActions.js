@@ -54,7 +54,7 @@ export const addOrganizationInfo = (organization, cb) => dispach => {
 export const deleteOrganizationInfo = id => dispach => {
 
   fetch(API_URL + 'api/organization/' + id, { method: 'DELETE', headers: { "Authorization": token } })
-    .then(response => response.json())
+    .then(response => response)
     .then(json => {
       dispach({
         type: REMOVE_FETCH_ORGANIZATION,

@@ -56,7 +56,7 @@ export const addUserInfo = (user, cb) => dispach => {
 export const deleteUserInfo = id => dispach => {
 
   fetch(API_URL + 'api/user/' + id, { method: 'DELETE', headers: { "Authorization": token } })
-    .then(response => response.json())
+    .then(response => response)
     .then(json => {
       dispach({
         type: REMOVE_FETCH_USER,
@@ -106,17 +106,16 @@ export const authUser = (userName, password, cb) => dispach => {
   })
     .then(response => response.json())
     .then(json => {
-
       cookies.set('userName', userName);
       cookies.set('token', json.accessToken, { expires: new Date(Date.now() + 8.64e+7) });
-      var decoded = jwt_decode(cookies.get('token'));
-      cookies.set('role', decoded.role);
-      if(decoded.role === "ADMIN"){
+      var decodeToken = jwt_decode(cookies.get('token'));
+      cookies.set('role', decodeToken.role);
+      if(decodeToken.role === "ADMIN"){
         if (typeof cb === "function") {
           cb();
         }
       }
-      if (decoded.role === "EMPLOYEE") {
+      if (decodeToken.role === "EMPLOYEE") {
         fetch(API_URL + 'api/user/loggedin', {
           method: 'GET',
           headers: { 'Content-Type': 'application/json', "Authorization": "Bearer " + json.accessToken }, credentials: 'same-origin'

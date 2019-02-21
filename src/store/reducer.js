@@ -53,7 +53,6 @@ const initialState = {
         'timeIn': 'Time In',
         'timeOut': 'Time Out'
     }
-
 }
 
 const reducer = (state = initialState, action) => {
