@@ -86,24 +86,22 @@ class Calendar extends React.Component {
     let startDate = new Date(this.state.calenderObj.month + "-01-" + this.state.calenderObj.year);
     let currentMonth = startDate.getMonth() + 1;
 
-    let timeIn = [];
-    for (var j = 0; j < this.props.attendance.length; j++) {
+    let timeIn = [], timeOut = [], DateTimeIn = [], DateTimeOut = [], totalHours, timeInterval, hours;
+
+    for (var j in this.props.attendance) {
       if (this.props.attendance[j].employee.id.toString() === this.state.calenderObj.id) {
         timeIn.push(this.props.attendance[j].timeInDate);
       }
     }
 
-    let timeOut = [];
-    for (var k = 0; k < this.props.attendance.length; k++) {
+    for (var k in this.props.attendance) {
       if (this.props.attendance[k].employee.id.toString() === this.state.calenderObj.id) {
         timeOut.push(this.props.attendance[k].timeOutDate);
       }
     }
 
-    let DateTimeIn = [];
-    let DateTimeOut = [];
-
     while ((currentMonth === this.state.calenderObj.month)) {
+      let newTime = 0, getHours;
       let date = Moment(startDate).format('DD-MM-YYYY');
       let weekDay = this.state.weekDays[new Date(new Date(startDate).getTime() - 24 * 60 * 60 * 1000).getDay()];
       let col = document.createElement("div");
@@ -121,24 +119,32 @@ class Calendar extends React.Component {
       }
 
       else {
-        for (var i = 0; i < this.props.attendance.length; i++) {
+        for (var i in this.props.attendance) {
           if ((Moment(this.props.attendance[i].date).format('DD-MM-YYYY') === date) && (this.props.attendance[i].employee.id.toString() === this.state.calenderObj.id)) {
             d = date;
             col.className = "column";
             cardDate.className = "card-text presentday-card"
             DateTimeIn = [];
-            for (var u = 0; u < timeIn.length; u++) {
+            for (var u in timeIn) {
               if (d === Moment(timeIn[u]).format("DD-MM-YYYY")) {
                 DateTimeIn.push(timeIn[u]);
               }
             }
             DateTimeOut = [];
-            for (var v = 0; v < timeOut.length; v++) {
+            for (var v in timeOut) {
               if (d === Moment(timeOut[v]).format("DD-MM-YYYY")) {
                 DateTimeOut.push(timeOut[v]);
               }
             }
-            cardInfo.innerHTML = "<div class='text-size'><span class='glyphicon glyphicon-log-in'> " + Moment(DateTimeIn[0]).format('h:mmA') + "</div><div class='text-size'><span class='glyphicon glyphicon-log-out'> " + Moment(DateTimeOut[DateTimeOut.length - 1]).format('h:mmA') + "</div>";
+
+            for (var h in DateTimeIn) {
+              timeInterval = Moment(DateTimeOut[h]).diff(Moment(DateTimeIn[h]));
+              hours = Moment.utc(Moment.duration(timeInterval).asMilliseconds());
+              getHours = newTime + hours;
+              newTime = getHours;
+            }
+            totalHours = Moment.utc(Moment.duration(getHours).asMilliseconds()).format("H:mm:ss");
+            cardInfo.innerHTML = "<div class='text-size'><span class='glyphicon glyphicon-log-in'> " + Moment(DateTimeIn[0]).format('h:mmA') + "</div><div class='text-size'><span class='glyphicon glyphicon-log-out'> " + Moment(DateTimeOut[DateTimeOut.length - 1]).format('h:mmA') + "</div><div class='text-size'><span class='glyphicon glyphicon-time'> " + totalHours + "</div>";
             cardInfo.className = "mt-5 m-rl-5";
             break;
           }
