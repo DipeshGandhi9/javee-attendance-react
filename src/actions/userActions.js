@@ -134,5 +134,10 @@ export const authUser = (userName, password, cb) => dispach => {
             }
           });
       }
+    })
+    .catch(eror => {
+      if (typeof cb === "function") {
+        cb(eror);
+      }
     });
 }
