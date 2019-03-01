@@ -114,6 +114,7 @@ class Employee extends Component {
 
     handleReset = (e) => {
         e.preventDefault();
+        document.getElementById("organization").selectedIndex = 0;
         this.setState((state) => {
             state.employeeObj = {
                 'firstName': '',

@@ -56,28 +56,17 @@ class Calendar extends React.Component {
       this.calendarCardGenerator();
     }
   }
-
-  onEmplopyeeChangeHandler = (e) => {
-    this.setState({ isSearchClick: false })
+  
+  onChangeHandler = (e) => {
+    this.setState({ isSearchClick: false });
     const { calenderObj } = this.state;
-    calenderObj["id"] = e.target.value;
-    this.setState({ calenderObj });
-  }
-
-  onMonthChangeHandler = (e) => {
-    this.setState({ isSearchClick: false })
-    let month = Number(e.target.value) + 1;
-    const { calenderObj } = this.state;
-    calenderObj["month"] = month;
-    this.setState({ calenderObj });
-  }
-
-  onYearChangeHandler = (e) => {
-    this.setState({ isSearchClick: false })
-    let year = e.target.value;
-    const { calenderObj } = this.state;
-    calenderObj["year"] = year;
-    this.setState({ calenderObj });
+      if (e.target.name === "month") {
+        calenderObj["month"] = Number(e.target.value) + 1;
+      }
+      else {
+        calenderObj[e.target.name] = e.target.value;
+      }
+    this.setState({calenderObj});
   }
 
   calendarCardGenerator = () => {
@@ -193,11 +182,11 @@ class Calendar extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   {hasEmployee ?
-                    <FormControl componentClass="select" name='employeeName' onChange={this.onEmplopyeeChangeHandler}>
+                    <FormControl componentClass="select" name='id' onChange={this.onChangeHandler}>
                       <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
                       {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
                     </FormControl> :
-                    <FormControl componentClass="select" name='employeeName' onChange={this.onEmployeeChangeHandler}>
+                    <FormControl componentClass="select" name='id' onChange={this.onEmployeeChangeHandler}>
                       <option>{this.props.employeeList.firstName}</option>
                     </FormControl>}
                 </Form>
@@ -205,7 +194,7 @@ class Calendar extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
+                  <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
                     {this.state.month.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected>{month}</option> : <option key={i} value={i} >{month}</option>)}
                   </FormControl>
                 </Form>
@@ -213,7 +202,7 @@ class Calendar extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="year" onChange={this.onYearChangeHandler}>
+                  <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
                     {yearList.map((year, i) => (this.state.currentYear === year.toString()) ? <option key={i} value={year} selected >{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>

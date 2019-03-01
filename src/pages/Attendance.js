@@ -47,29 +47,23 @@ class Attendance extends React.Component {
     });
   }
 
-  onEmployeeChangeHandler = (e) => {
-    const { attendanceObj } = this.state;
+  onChangeHandler = (e) => {
+    const { attendanceObj , monthYearObject } = this.state;
     if (e.target.value !== "") {
-      attendanceObj["employeeId"] = e.target.value;
+      if (e.target.name === "month") {
+        monthYearObject["month"] = parseInt(e.target.value, 10)+1;
+      }
+      if (e.target.name === "year") {
+        monthYearObject["year"] = parseInt(e.target.value, 10);
+      }
+      else {
+        attendanceObj[e.target.name] = e.target.value;
+      }
     }
     else {
       delete attendanceObj["employeeId"];
     }
-    this.setState({ attendanceObj });
-  }
-
-  onMonthChangeHandler = (e) => {
-    const { monthYearObject } = this.state;
-    monthYearObject["month"] = parseInt(e.target.value, 10) + 1;
-    this.setState({ monthYearObject });
-    console.log(this.state);
-  }
-
-  onYearChangeHandler = (e) => {
-    const { monthYearObject } = this.state;
-    monthYearObject["year"] = parseInt(e.target.value, 10);
-    this.setState({ monthYearObject });
-    console.log(this.state);
+    this.setState({ attendanceObj , monthYearObject });
   }
 
   onSearch = () => {
@@ -101,11 +95,11 @@ class Attendance extends React.Component {
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
                   {hasEmployee ?
-                    <FormControl componentClass="select" name='employeeName' onChange={this.onEmployeeChangeHandler}>
+                    <FormControl componentClass="select" name='employeeId' onChange={this.onChangeHandler}>
                       <option value="">{hasEmployee ? "--Select Employee--" : "No Employees"}</option>
                       {this.props.employeeList.map((employee) => <option key={employee.id} value={employee.id} >{employee.firstName}</option>)}
                     </FormControl> :
-                    <FormControl componentClass="select" name='employeeName'>
+                    <FormControl componentClass="select" name='employeeId'>
                       <option>{this.props.employeeList.firstName}</option>
                     </FormControl>}
                 </Form>
@@ -113,7 +107,7 @@ class Attendance extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="month" onChange={this.onMonthChangeHandler}>
+                  <FormControl componentClass="select" name="month" onChange={this.onChangeHandler}>
                     {this.state.monthList.map((month, i) => (this.state.currentMonth === month) ? <option key={i} value={i} selected >{month}</option> : <option key={i} value={i} >{month}</option>)}
                   </FormControl>
                 </Form>
@@ -121,7 +115,7 @@ class Attendance extends React.Component {
 
               <Col lg={4} md={4} sm={4} className="mb-10">
                 <Form horizontal>
-                  <FormControl componentClass="select" name="year" onChange={this.onYearChangeHandler}>
+                  <FormControl componentClass="select" name="year" onChange={this.onChangeHandler}>
                     {this.state.yearList.map((year, i) => (this.state.currentYear === year) ? <option key={i} value={year} selected>{year}</option> : <option key={i} value={year} >{year}</option>)}
                   </FormControl>
                 </Form>
@@ -167,7 +161,7 @@ class Attendance extends React.Component {
                     );
                   })}
                 </tbody>
-                
+
               </Table>
             </Col>
           </Row>
