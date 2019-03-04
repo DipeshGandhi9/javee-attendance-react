@@ -96,9 +96,10 @@ class Login extends Component {
             this.setState({ show: false, isLoggedIn: false });
             document.getElementById("user").innerHTML = "User Name : " + this.state.attendanceObj.userName;
             document.getElementById("timein").innerHTML = "Time In : " + Moment(this.state.attendanceObj.timeInDate).format('h:mm:ss a');
+            document.getElementById("timeout").innerHTML = "";
             this.props.addTimeInAttendance(this.state.attendanceObj);
           }
-
+          cookies.remove("employeeId");
         }
         else {
           attendanceObj["errorMessage"] = "Invalid User Name or Password!";

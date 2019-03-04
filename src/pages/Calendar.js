@@ -56,17 +56,17 @@ class Calendar extends React.Component {
       this.calendarCardGenerator();
     }
   }
-  
+
   onChangeHandler = (e) => {
     this.setState({ isSearchClick: false });
     const { calenderObj } = this.state;
-      if (e.target.name === "month") {
-        calenderObj["month"] = Number(e.target.value) + 1;
-      }
-      else {
-        calenderObj[e.target.name] = e.target.value;
-      }
-    this.setState({calenderObj});
+    if (e.target.name === "month") {
+      calenderObj["month"] = Number(e.target.value) + 1;
+    }
+    else {
+      calenderObj[e.target.name] = e.target.value;
+    }
+    this.setState({ calenderObj });
   }
 
   calendarCardGenerator = () => {
@@ -100,28 +100,38 @@ class Calendar extends React.Component {
 
       let cardDate = document.createElement("div");
       let cardInfo = document.createElement("div");
-      let d;
+
+      col.className = "column";
+      if ((this.state.calenderObj.year < new Date().getFullYear()) || (this.state.calenderObj.month - 1 < new Date().getMonth())) {
+        cardDate.className = "card-text absentday-card";
+      }
+      else {
+        if (((this.state.calenderObj.month - 1 > new Date().getMonth()) && (this.state.calenderObj.year >= new Date().getFullYear())) || (startDate.getDate() >= new Date().getDate())) {
+          cardDate.className = "card-text remainingday-card";
+        }
+        else {
+          cardDate.className = "card-text absentday-card";
+        }
+      }
 
       if (weekDay === "Sun") {
         col.className = "column fullColumn";
         cardDate.className = "card-text-sunday sunday-card";
       }
 
-      else {
+      if (this.state.calenderObj.id !== undefined) {
         for (var i in this.props.attendance) {
           if ((Moment(this.props.attendance[i].date).format('DD-MM-YYYY') === date) && (this.props.attendance[i].employee.id.toString() === this.state.calenderObj.id)) {
-            d = date;
-            col.className = "column";
             cardDate.className = "card-text presentday-card"
             DateTimeIn = [];
             for (var u in timeIn) {
-              if (d === Moment(timeIn[u]).format("DD-MM-YYYY")) {
+              if (date === Moment(timeIn[u]).format("DD-MM-YYYY")) {
                 DateTimeIn.push(timeIn[u]);
               }
             }
             DateTimeOut = [];
             for (var v in timeOut) {
-              if (d === Moment(timeOut[v]).format("DD-MM-YYYY")) {
+              if (date === Moment(timeOut[v]).format("DD-MM-YYYY")) {
                 DateTimeOut.push(timeOut[v]);
               }
             }
@@ -137,19 +147,7 @@ class Calendar extends React.Component {
             cardInfo.className = "mt-5 m-rl-5";
             break;
           }
-          else {
-            col.className = "column";
-            if ((this.state.calenderObj.year < new Date().getFullYear()) || (this.state.calenderObj.month - 1 < new Date().getMonth())) {
-              cardDate.className = "card-text absentday-card";
-            }
-            else
-              if (((this.state.calenderObj.month - 1 > new Date().getMonth()) && (this.state.calenderObj.year >= new Date().getFullYear())) || (startDate.getDate() >= new Date().getDate())) {
-                cardDate.className = "card-text remainingday-card";
-              }
-              else {
-                cardDate.className = "card-text absentday-card";
-              }
-          }
+
         }
       }
       cardDate.innerHTML = startDate.getDate() + "  " + weekDay;
