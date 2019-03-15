@@ -1,0 +1,28 @@
+ul{
+    list-style-type: none !important;
+    padding-left: 0 !important;
+}
+.m-10{
+    margin:10px;
+}
+.menu{
+    margin-right:20px !important;
+    top:15px !important;
+    font-size: 25px !important;
+    cursor: pointer;
+    color : #214f9c;
+}
+a:hover {
+    text-decoration: none;
+}
+a {
+    color : #214f9c !important;
+    text-decoration: none;
+}
+.navbar-right {
+    float: right!important;
+    margin-right: -15px;
+}
+.text{
+    color :  #214f9c !important;
+}
