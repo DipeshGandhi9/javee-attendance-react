@@ -21,4 +21,4 @@ export const GET_FILTER_ATTENDANCE = 'GET_FILTER_ATTENDANCE';
 
 export const LOAD_DASHBOARD = 'LOAD_DASHBOARD';
 
-export const API_URL = "http://localhost:8080/";
+export const API_URL = "https://javee-attendance-backend.herokuapp.com/";
