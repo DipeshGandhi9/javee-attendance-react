@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 
 
@@ -10,7 +10,7 @@ const Login = Loadable({
 });
 
 export default () => (
-    <Switch>
-      <Route exact path="/" component={Login} /> 
-    </Switch>
+  <Switch>
+    <Route exact path="/" component={Login} />
+  </Switch>
 );

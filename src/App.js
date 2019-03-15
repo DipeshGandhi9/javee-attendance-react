@@ -13,16 +13,16 @@ class App extends Component {
   render() {
     return (
       <div className="App" id="javee">
-      <Helmet>
-        <meta charSet="utf-8" />
-        {/* <title>Javee Attendance</title> */}
-        <meta name="description" content="Javee Attendance" />
-      </Helmet>
+        <Helmet>
+          <meta charSet="utf-8" />
+          {/* <title>Javee Attendance</title> */}
+          <meta name="description" content="Javee Attendance" />
+        </Helmet>
 
-      <div className="App-intro">
-        <Routes />
+        <div className="App-intro">
+          <Routes />
+        </div>
       </div>
-    </div>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Row, Col, Table, Glyphicon, Button, OverlayTrigger, Tooltip, Modal } from 'react-bootstrap';
+import { Grid, Row, Col, Table, Glyphicon, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -29,12 +29,8 @@ class UserList extends React.Component {
         this.setState({ show: false });
     }
 
-    deleteUser = (e, id) => {
-        this.props.deleteUserInfo(id);
-        this.setState({ show: false });
-    }
-
     render() {
+        let hasUsers = (this.props.userList.length !== 0) ? true : false;
         return (
             <div>
                 <SideNavBar />
@@ -55,7 +51,7 @@ class UserList extends React.Component {
                     <div className="mt-30">
                         <Row>
                             <Col lg={12} >
-                                <Table responsive bordered condensed>
+                                <Table responsive bordered striped>
                                     <thead>
                                         <tr>
                                             <th>
@@ -76,9 +72,6 @@ class UserList extends React.Component {
                                             <th>
                                                 {this.props.tableHeader.edit}
                                             </th>
-                                            <th>
-                                                {this.props.tableHeader.delete}
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -90,8 +83,7 @@ class UserList extends React.Component {
                                                     <td>{user.userName}</td>
                                                     <td>{user.role}</td>
                                                     <td></td>
-                                                    <td>{user.role === "ADMIN" ? "" : <Link to={{pathname: "/user",search : "id=" +user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
-                                                    <td >{user.role === "ADMIN" ? "" : <Glyphicon glyph="remove" onClick={() => { this.setState({ show: true, id: user.id }) }} />} </td>
+                                                    <td>{user.role === "ADMIN" ? "" : <Link to={{ pathname: "/user", search: "id=" + user.id }} className="icon-button"><Glyphicon glyph="edit" /></Link>}</td>
                                                 </tr>
                                             );
                                         })}
@@ -99,24 +91,8 @@ class UserList extends React.Component {
                                 </Table>
                             </Col>
                         </Row>
+                        {hasUsers ? "" : <h4 align="center" style={{ color: 'grey' }}> No Users are available to display. Please add new user</h4>}
                     </div>
-                    <Modal show={this.state.show} onHide={this.onhandleHide} container={this} aria-labelledby="contained-modal-title" className="modal-width">
-                        <Modal.Header closeButton>
-                            <h3>
-                                Are you sure?
-                            </h3>
-                        </Modal.Header>
-                        <Modal.Body>
-                            Do you want to delete this user?
-                            </Modal.Body>
-                        <Modal.Footer>
-                            <div>
-                                <Button className="delete-modal-button" onClick={(e) => this.deleteUser(e, this.state.id)}>CONFIRM</Button>
-                                <Button className="delete-modal-button" onClick={this.onhandleHide}>CANCLE</Button>
-                            </div>
-                        </Modal.Footer>
-                    </Modal>
-
                 </Grid>
             </div>
         )

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Grid, FormControl, Col, Well, Radio } from 'react-bootstrap';
+import { Button, Form, FormGroup, Grid, FormControl, Col, Well, Radio, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
@@ -9,6 +10,7 @@ import Cookies from 'universal-cookie';
 import { API_URL } from '../store/constants'
 import SideNavBar from '../components/SideNavBar.js';
 import { updateEmployeeInfo, addEmployeeInfo } from '../actions/employeeActions';
+import { loadOrganizationInfo } from '../actions/organizationActions';
 
 const cookies = new Cookies();
 
@@ -29,14 +31,16 @@ class Employee extends Component {
     }
 
     componentDidMount() {
+        this.props.loadOrganizationInfo();
         var queryParameters = queryString.parse(this.props.location.search);
         if (queryParameters['id']) {
             this.getEmployeeObj(queryParameters['id']);
         }
     }
-   
+
     getEmployeeObj = (id) => {
-        fetch(API_URL + 'api/employee/' + id, { method: 'GET' ,headers : {"Authorization" : "Bearer "+cookies.get('token')} })
+
+        fetch(API_URL + 'api/employee/' + id, { method: 'GET', headers: { "Authorization": "Bearer " + cookies.get('token') } })
             .then(response => response.json())
             .then(employeeObj => {
                 this.setState((state) => {
@@ -44,7 +48,26 @@ class Employee extends Component {
                     return state;
                 })
             }
-        )
+            )
+    }
+
+    onChangeHandeler = (e) => {
+        const { employeeObj } = this.state;
+        let id = e.target.value;
+        let selectedOrganization = this.props.organizationList.filter(function (item) {
+            return item.id.toString() === id;
+        });
+        if (id === "") {
+            employeeObj["organization"] = "";
+            this.setState({ employeeObj });
+        }
+        else {
+            employeeObj["organization"] = {
+                "id": id,
+                "organizationName": selectedOrganization[0].organizationName,
+            };
+            this.setState({ employeeObj });
+        }
     }
 
     handleChange = (e) => {
@@ -91,6 +114,7 @@ class Employee extends Component {
 
     handleReset = (e) => {
         e.preventDefault();
+        document.getElementById("organization").selectedIndex = 0;
         this.setState((state) => {
             state.employeeObj = {
                 'firstName': '',
@@ -105,12 +129,50 @@ class Employee extends Component {
     }
 
     render() {
+
+        let hasOrganization = (this.props.organizationList.length !== 0) ? true : false;
+        let selectedOrganization = [];
+        for (var keyValue in this.state.employeeObj.organization) {
+            selectedOrganization.push(this.state.employeeObj.organization[keyValue]);
+        }
+
         return (
             <div>
                 <SideNavBar />
                 <Grid>
+                    <Row>
+                        <Col lg={12}>
+                            <div>
+                                <Link to="employeelist">
+                                    <Button className=" button pull-right">
+                                        Employee List
+                                        </Button>
+                                </Link>
+                            </div>
+                        </Col>
+                    </Row>
                     <Well className="m-auto mt-30" style={{ maxWidth: "600px" }}>
                         <Form horizontal className="m-auto mt-50" style={{ maxWidth: "450px" }} onSubmit={this.onSubmitClick}  >
+
+                            <FormGroup>
+                                <Col sm={4} xs={12}><b>Organization</b> </Col>
+                                <Col sm={8} xs={12}>
+                                    <FormControl componentClass="select" id="organization" onChange={this.onChangeHandeler} required >
+                                        <option value="" >{hasOrganization ? "--Select Organization--" : "No Organization"}</option>
+                                        {this.props.organizationList.map((organization, id) =>
+                                            (selectedOrganization[0] === organization.id) ?
+                                                <option key={id} value={organization.id} name={organization.organizationName} selected>
+                                                    {organization.organizationName}
+                                                </option> :
+
+                                                <option key={id} value={organization.id} name={organization.organizationName} >
+                                                    {organization.organizationName}
+                                                </option>
+                                        )}
+                                    </FormControl>
+                                </Col>
+                            </FormGroup>
+
                             <FormGroup>
                                 <Col sm={4} xs={12}><b>First Name</b> </Col>
                                 <Col sm={8} xs={12}>
@@ -173,11 +235,12 @@ class Employee extends Component {
 }
 
 const mapStateToProps = state => ({
+    organizationList: state.app.organizationList
 })
 
 export default withRouter(connect(
     mapStateToProps,
     dispatch => bindActionCreators({
-        updateEmployeeInfo, addEmployeeInfo
+        updateEmployeeInfo, addEmployeeInfo, loadOrganizationInfo
     }, dispatch),
 )(Employee));
