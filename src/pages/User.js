@@ -18,12 +18,12 @@ class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            "Role": ["EMPLOYEE", "ADMIN", "HR"],
+            "roles": ["EMPLOYEE", "HR_MANAGER"],
             userObj: {
                 'userName': "",
                 'password': "",
                 'confirmPassword': "",
-                "Role": "EMPLOYEE"
+                "role": "EMPLOYEE"
             }
         }
     }
@@ -35,6 +35,10 @@ class User extends Component {
         if (queryParameters['id']) {
             this.getUserObj(queryParameters['id']);
         }
+        if (cookies.get("role") === "HR_MANAGER") {
+            this.state.roles.splice(this.state.roles.indexOf("HR_MANAGER"), 1);
+        }
+        console.log(this.state.roles);
     }
 
     getUserObj = (id) => {
@@ -45,7 +49,7 @@ class User extends Component {
                 const { userObj } = this.state;
                 userObj["userName"] = user.userName;
                 userObj["id"] = user.id;
-                userObj["Role"] = user.role;
+                userObj["role"] = user.role;
                 userObj["employee"] =
                     {
                         "id": user.employee.id,
@@ -85,7 +89,7 @@ class User extends Component {
 
     onRoleChange = (e) => {
         const { userObj } = this.state;
-        userObj["Role"] = e.target.value;
+        userObj["role"] = e.target.value;
         this.setState({ userObj });
     }
 
@@ -97,7 +101,7 @@ class User extends Component {
                 'userName': "",
                 'password': "",
                 'confirmPassword': "",
-                'Role': "EMPLOYEE"
+                'role': "EMPLOYEE"
             }
             return state;
         });
@@ -221,7 +225,7 @@ class User extends Component {
                                 </Col>
                                 <Col sm={8} xs={12}>
                                     <FormControl componentClass="select" id="select" onChange={this.onRoleChange} required >
-                                        {this.state.Role.map((role, id) =>
+                                        {this.state.roles.map((role, id) =>
                                             <option key={id} value={role} name={role}>
                                                 {role}
                                             </option>

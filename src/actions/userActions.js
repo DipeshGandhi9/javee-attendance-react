@@ -17,7 +17,7 @@ export const loadUserInfo = () => dispach => {
       });
     })
     .catch(eror => {
-     // window.open("/", "_SELF");
+      // window.open("/", "_SELF");
       dispach({
         type: FETCH_USERS,
         payload: []
@@ -110,7 +110,7 @@ export const authUser = (userName, password, cb) => dispach => {
       cookies.set('token', json.accessToken, { expires: new Date(Date.now() + 8.64e+7) });
       var decodeToken = jwt_decode(cookies.get('token'));
       cookies.set('role', decodeToken.role);
-      if(decodeToken.role === "ADMIN"){
+      if (decodeToken.role === "ADMIN" || decodeToken.role === "HR_MANAGER") {
         if (typeof cb === "function") {
           cb();
         }
